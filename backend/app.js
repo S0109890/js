@@ -16,6 +16,9 @@ const NODE_ENV = process.env.NODE_ENV;
 const indexRouter = require('./routes/index');
 
 const app = express();
+// const client_id = 'qkgbpYoWMqnsIJh0Dcux';
+// const client_secret = 'KyABGi7_GI';
+
 logger.info('app start');
 
 
