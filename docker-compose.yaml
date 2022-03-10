@@ -46,16 +46,16 @@ services:
     command: "npm start"
 
   # frontend build
-  # frontend:
-  #   container_name: book_frontend
-  #   depends_on:
-  #     - backend
-  #   build: ./frontend/bookscanner-frontend
-  #   image: vue-app
-  #   volumes:
-  #     - ./frontend/bookscanner-frontend:/app
-  #   ports:
-  #     - "8080:8080"
+  frontend:
+    container_name: book_frontend
+    depends_on:
+      - backend
+    build: ./frontend/bookscanner-frontend
+    image: vue-app
+    volumes:
+      - ./frontend/bookscanner-frontend:/app
+    ports:
+      - "8080:8080"
 
 # # MQTT server build
 #   simulator-server:
