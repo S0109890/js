@@ -16,10 +16,30 @@
   font-family: 'Pretendard-Medium';
 }
 
+.navbar-expand, .navbar, .card-title,
+h1, h2, h3, h4, h5, h6,
+label {
+  font-family: 'Pretendard-SemiBold';
+}
+
 #card-section, #search-section, #review-section {
   padding: 40px 100px;
 }
 
-.navbar-expand, .navbar, .card-title {
-  font-family: 'Pretendard-SemiBold';
+#write-section {
+  padding: 40px 30%;
+}
+
+button + button {
+  margin-left: 5px;
+}
+
+.custom-file-input ~ .custom-file-label[data-browse]::after {
+  content: '파일추가' !important;
+}
+
+@media screen and (max-width: 560px) {
+  #write-section {
+    padding: 40px 100px
+  }
 }

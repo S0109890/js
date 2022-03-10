@@ -1,13 +1,22 @@
 <template>
   <div>
     <b-container id="review-section" fluid>
-      <b-card id="data-card" no-body class="overflow-hidden">
+      <b-card id="data-card" header-tag="header" header-bg-variant="white" no-body class="overflow-hidden">
+        <template #header>
+          <b-row>
+            <b-col><h4 style="margin-bottom: 0">중고도서 제목</h4></b-col>
+            <b-col class="data-btn">
+              <b-button size="sm" variant="primary" @click="$router.push('/regi')">수정</b-button>
+              <b-button size="sm" variant="danger">삭제</b-button>
+            </b-col>
+          </b-row>
+        </template>
         <b-row no-gutters>
           <b-col md="4">
             <b-card-img src="https://placekitten.com/380/200" img-left alt="Image" class="rounded-0"></b-card-img>
           </b-col>
           <b-col id="review-data" md="8">
-            <b-card-body title="중고도서 제목" sub-title="저자 | 출판사 | 출간일 | 판매가">
+            <b-card-body title="ISBN 번호" sub-title="저자 | 출판사 | 출간일 | 판매가">
               <b-card-text>
                 국회에 제출된 법률안 기타의 의안은 회기중에 의결되지 못한 이유로 폐기되지 아니한다. 다만, 국회의원의
                 임기가 만료된 때에는 그러하지 아니하다. 모든 국민은 고문을 받지 아니하며, 형사상 자기에게 불리한 진술을
@@ -20,13 +29,12 @@
         </b-row>
       </b-card>
 
-      <b-card id="review-card" no-body>
+      <b-card id="review-card" no-body header-bg-variant="white">
         <template #header>
           <b-row>
             <b-col class="review-title"><h5>리뷰 등록일</h5></b-col>
             <b-col class="review-btn" cols="8">
-              <b-button variant="primary" size="sm">수정</b-button>
-              <b-button size="sm">삭제</b-button>
+              <b-button variant="danger" size="sm">삭제</b-button>
             </b-col>
           </b-row>
         </template>

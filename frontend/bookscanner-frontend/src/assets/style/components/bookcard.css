@@ -31,7 +31,7 @@
   height: 100%;
   flex-direction: column;
   justify-content: space-between;
-  padding: 50px 25px;
+  padding: 40px 1.25rem;
 }
 
 #review-section img {
@@ -60,6 +60,10 @@
   margin-bottom: 0;
 }
 
+.card-subtitle {
+  margin-bottom: 20px !important;
+}
+
 .review-title, .review-btn {
   padding: 0;
 }
@@ -69,10 +73,6 @@
   align-items: center;
 }
 
-.review-btn {
+.data-btn, .review-btn {
   text-align: right;
-}
-
-.review-btn button + button {
-  margin-left: 10px;
 }
