@@ -16,8 +16,8 @@
   font-family: 'Pretendard-Medium';
 }
 
-#card-section, #review-section {
-  padding: 40px 80px;
+#card-section, #search-section, #review-section {
+  padding: 40px 100px;
 }
 
 .navbar-expand, .navbar, .card-title {

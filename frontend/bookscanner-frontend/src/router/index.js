@@ -18,11 +18,16 @@ const routes = [
   {
     path: '/review',
     component: () => import('../views/BS-review.vue')
+  },
+  {
+    path: '/write',
+    component: () => import('../views/BS-write.vue')
+  },
+  {
+    path: '*',
+    component: () => import('../components/NotFound.vue'),
+    meta: { header: false }
   }
-  // {
-  //   path: '*',
-  //   component: () => import('../components/NotFound.vue')
-  // }
 ]
 
 const router = new VueRouter({

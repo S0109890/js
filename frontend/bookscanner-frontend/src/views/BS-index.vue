@@ -1,5 +1,22 @@
 <template>
   <div>
+    <b-container id="search-section" fluid>
+      <b-input-group>
+        <template #prepend>
+          <b-dropdown text="Dropdown" variant="light">
+            <b-dropdown-item>Action A</b-dropdown-item>
+            <b-dropdown-item>Action B</b-dropdown-item>
+          </b-dropdown>
+        </template>
+
+        <b-form-input></b-form-input>
+
+        <template #append>
+          <b-button variant="primary">검색</b-button>
+        </template>
+      </b-input-group>
+    </b-container>
+
     <b-container id="card-section" fluid>
       <b-card-group deck>
         <b-card title="중고도서 제목" img-src="https://picsum.photos/300/300/?image=41" img-alt="Image" img-top>
