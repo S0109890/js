@@ -2,28 +2,32 @@ version: '3'
 services:
   # database build
   database:
-    container_name: team_db
+    container_name: book_db
     # 빌드될 dockerfile 위치
-    build: ./database
-    # 사용될 이미지파일 이름
-    image: joyji0/team_db
+    build:
+      context: ./database
+    # 만들어질 이미지파일 이름
+    image: book_db
+    # 연결될 DB 환경설정 값
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=meta_bookstore
     volumes:
       - ./database/db:/var/lib/postgresql/data
       # - ./database/db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
     ports:
       - "5432:5432"
     restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-
+  
   # backend build
   backend:
-    container_name: team_backend
+    container_name: book_backend
     depends_on:
       - database
-    build: ./backend
-    image: joyji0/team_backend
+    build: 
+      context: ./backend
+    image: book_backend
     volumes:
       - ./backend:/usr/src/app
     ports:
@@ -38,20 +42,20 @@ services:
       - DB_ID=postgres
       - DB_PASS=postgres
       - DB_DIALECT=postgres
-    restart: "unless-stopped"
+    restart: always
     command: "npm start"
 
-  # # frontend build
-  # frontend:
-  #   container_name: team_frontend
-  #   depends_on:
-  #     - backend
-  #   build: ./frontend
-  #   image: vue-app
-  #   volumes:
-  #     - ./frontend:/app
-  #   ports:
-  #     - "8080:8080"
+  # frontend build
+  frontend:
+    container_name: book_frontend
+    depends_on:
+      - backend
+    build: ./frontend/bookscanner-frontend
+    image: vue-app
+    volumes:
+      - ./frontend/bookscanner-frontend:/app
+    ports:
+      - "8080:8080"
 
 # # MQTT server build
 #   simulator-server:
