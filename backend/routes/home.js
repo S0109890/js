@@ -8,7 +8,10 @@ const storageService = require('../service/storageService');
 router.get('/', async (req, res) => {
   try {
     const params = {
-      name: req.query.name,
+      title: req.query.title,
+      author: req.query.author,
+      image: req.query.image,
+      discription: req.query.discription,
     };
     logger.info(`(storage.list.params) ${JSON.stringify(params)}`);
 
@@ -22,16 +25,14 @@ router.get('/', async (req, res) => {
   }
 });
 
-// 상세정보 조회
-router.get('/:id', async (req, res) => {
+// 검색 결과 - 리스트 조회
+router.get('/:req', async (req, res) => {
   try {
-    const params = {
-      id: req.params.id,
-    };
-    logger.info(`(storage.info.params) ${JSON.stringify(params)}`);
+    const params = { req }
+    logger.info(`(storage.info.params) ${JSON.stringify(params)}`)
 
     const result = await storageService.info(params);
-    logger.info(`(storage.info.result) ${JSON.stringify(result)}`);
+    logger.info(`(storage.info.result) ${JSON.stringify(result)}`)
 
     // 최종 응답
     res.status(200).json(result);

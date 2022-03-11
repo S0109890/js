@@ -24,15 +24,22 @@ const dao = {
 
   // 리스트 조회
   selectList(params) {
-    // where 검색 조건
+    // where 검색 조건 - title
     const setQuery = {};
-    if (params.name) {
+    if (params.title) {
       setQuery.where = {
         ...setQuery.where,
-        name: { [Op.like]: `%${params.name}%` }, // like검색
+        title: { [Op.like]: `%${params.title}%` }, // like검색
       };
     }
-    
+    // where 검색 조건 - author
+    if (params.author) {
+      setQuery.where = {
+        ...setQuery.where,
+        author: { [Op.like]: `%${params.author}%` }, // like검색
+      };
+    }
+
     // order by 정렬 조건
     setQuery.order = [['id', 'DESC']];
     return new Promise((resolve, reject) => {
@@ -46,17 +53,17 @@ const dao = {
     });
   },
 
-  // 상세정보 조회
+  // 상세정보 보기, 해당 서적의 리뷰 보기
   selectInfo(params) {
     return new Promise((resolve, reject) => {
-      Storage.findByPk(
-        params.id,
+      Storage.findAndCountAll(
+        params.title,
       ).then((selectedInfo) => {
-        resolve(selectedInfo);
+        resolve(selectedInfo.review) // 리뷰만 보내기 (정렬x)
       }).catch((err) => {
-        reject(err);
-      });
-    });
+        reject(err)
+      })
+    })
   },
 
   // 수정
@@ -68,25 +75,25 @@ const dao = {
           where: { id: params.id },
         },
       ).then(([updated]) => {
-        resolve({ updatedCount: updated });
+        resolve({ updatedCount: updated })
       }).catch((err) => {
-        reject(err);
-      });
-    });
+        reject(err)
+      })
+    })
   },
   
   // 삭제
   delete(params) {
     return new Promise((resolve, reject) => {
       Storage.destroy({
-        where: { id: params.id },
+        where: { params },
       }).then((deleted) => {
-        resolve({ deletedCount: deleted });
+        resolve({ deletedCount: deleted })
       }).catch((err) => {
-        reject(err);
-      });
-    });
+        reject(err)
+      })
+    })
   },
-};
+}
 
-module.exports = dao;
+module.exports = dao

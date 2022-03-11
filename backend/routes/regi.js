@@ -31,7 +31,8 @@ router.post('/', async (req, res) => {
   } catch (err) {
     res.status(500).json({ err: err.toString() });
   }
-});
+})
 
+// 수정
 
-module.exports = router;
+module.exports = router

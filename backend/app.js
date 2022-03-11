@@ -16,11 +16,8 @@ const NODE_ENV = process.env.NODE_ENV;
 const indexRouter = require('./routes/index');
 
 const app = express();
-// const client_id = 'qkgbpYoWMqnsIJh0Dcux';
-// const client_secret = 'KyABGi7_GI';
 
 logger.info('app start');
-
 
 // view engine setup
 // views -> 사용하는 템플릿 엔진 이 있는 디렉토리 설정 
@@ -39,8 +36,6 @@ app.use(bodyParser.json());
 // 라우터 연결
 app.use('/', indexRouter);
 
-// mqtt subscribe
-// receiveMqtt();
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
