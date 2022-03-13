@@ -1,8 +1,8 @@
 const express = require('express');
 const logger = require('../lib/logger');
-const departmentRouter = require('./department');
-const userRouter = require('./user');
-const deviceRouter = require('./device');
+const homeRouter = require('./home');
+const reviewRouter = require('./review');
+const regiRouter = require('./regi');
 
 const router = express.Router();
 
@@ -23,10 +23,10 @@ router.get('/log-test', (req, res, next) => {
   res.send('log test');
 });
 
-// RESTFull API를 위해 복수형(/departments...)을 사용
-router.use('/departments', departmentRouter);
-router.use('/users', userRouter);
-router.use('/devices', deviceRouter);
+// RESTFull API
+router.use('/home', homeRouter);
+router.use('/review', reviewRouter);
+router.use('/regi', regiRouter);
 
 
 module.exports = router;

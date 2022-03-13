@@ -1,16 +1,16 @@
 const logger = require('../lib/logger');
-const departmentDao = require('../dao/departmentDao');
+const storageDao = require('../dao/storageDao');
 
 const service = {
-  // department 입력
+  // storage 입력
   async reg(params) {
     let inserted = null;
 
     try {
-      inserted = await departmentDao.insert(params);
-      logger.debug(`(departmentService.reg) ${JSON.stringify(inserted)}`);
+      inserted = await storageDao.insert(params);
+      logger.debug(`(storageService.reg) ${JSON.stringify(inserted)}`);
     } catch (err) {
-      logger.error(`(departmentService.reg) ${err.toString()}`);
+      logger.error(`(storageService.reg) ${err.toString()}`);
       return new Promise((resolve, reject) => {
         reject(err);
       });
@@ -21,15 +21,16 @@ const service = {
       resolve(inserted);
     });
   },
+
   // selectList
   async list(params) {
     let result = null;
 
     try {
-      result = await departmentDao.selectList(params);
-      logger.debug(`(departmentService.list) ${JSON.stringify(result)}`);
+      result = await storageDao.selectList(params);
+      logger.debug(`(storageService.list) ${JSON.stringify(result)}`);
     } catch (err) {
-      logger.error(`(departmentService.list) ${err.toString()}`);
+      logger.error(`(storageService.list) ${err.toString()}`);
       return new Promise((resolve, reject) => {
         reject(err);
       });
@@ -39,15 +40,16 @@ const service = {
       resolve(result);
     });
   },
+
   // selectInfo
   async info(params) {
     let result = null;
 
     try {
-      result = await departmentDao.selectInfo(params);
-      logger.debug(`(departmentService.info) ${JSON.stringify(result)}`);
+      result = await storageDao.selectInfo(params);
+      logger.debug(`(storageService.info) ${JSON.stringify(result)}`);
     } catch (err) {
-      logger.error(`(departmentService.info) ${err.toString()}`);
+      logger.error(`(storageService.info) ${err.toString()}`);
       return new Promise((resolve, reject) => {
         reject(err);
       });
@@ -57,15 +59,16 @@ const service = {
       resolve(result);
     });
   },
+  
   // update
   async edit(params) {
     let result = null;
 
     try {
-      result = await departmentDao.update(params);
-      logger.debug(`(departmentService.edit) ${JSON.stringify(result)}`);
+      result = await storageDao.update(params);
+      logger.debug(`(storageService.edit) ${JSON.stringify(result)}`);
     } catch (err) {
-      logger.error(`(departmentService.edit) ${err.toString()}`);
+      logger.error(`(storageService.edit) ${err.toString()}`);
       return new Promise((resolve, reject) => {
         reject(err);
       });
@@ -75,15 +78,16 @@ const service = {
       resolve(result);
     });
   },
+
   // delelte
   async delete(params) {
     let result = null;
 
     try {
-      result = await departmentDao.delete(params);
-      logger.debug(`(departmentService.delete) ${JSON.stringify(result)}`);
+      result = await storageDao.delete(params);
+      logger.debug(`(storageService.delete) ${JSON.stringify(result)}`);
     } catch (err) {
-      logger.error(`(departmentService.delete) ${err.toString()}`);
+      logger.error(`(storageService.delete) ${err.toString()}`);
       return new Promise((resolve, reject) => {
         reject(err);
       });

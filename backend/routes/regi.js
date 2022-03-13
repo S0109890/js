@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const logger = require('../lib/logger');
-const userService = require('../service/userService');
+const storageService = require('../service/storageService');
 
 // 등록
 router.post('/', async (req, res) => {
@@ -12,7 +12,7 @@ router.post('/', async (req, res) => {
       code: req.body.code,
       description: req.body.description,
     };
-    logger.info(`(user.reg.params) ${JSON.stringify(params)}`);
+    logger.info(`(storage.reg.params) ${JSON.stringify(params)}`);
 
     // 입력값 null 체크
     if (!params.name) {
@@ -23,8 +23,8 @@ router.post('/', async (req, res) => {
     }
 
     // 비즈니스 로직 호출
-    const result = await userService.reg(params);
-    logger.info(`(user.reg.result) ${JSON.stringify(result)}`);
+    const result = await storageService.reg(params);
+    logger.info(`(storage.reg.result) ${JSON.stringify(result)}`);
 
     // 최종 응답
     res.status(200).json(result);
@@ -32,5 +32,6 @@ router.post('/', async (req, res) => {
     res.status(500).json({ err: err.toString() });
   }
 });
+
 
 module.exports = router;
