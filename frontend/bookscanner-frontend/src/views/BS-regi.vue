@@ -1,69 +1,64 @@
 <template>
   <div>
     <b-container id="write-section" fluid>
-      <h2 style="margin-bottom: 40px">도서 {{ inputMode }}</h2>
+      <h2 style="margin-bottom: 40px">도서 {{ inputModeText }}</h2>
       <!-- inputMode check -->
       inputMode: {{ inputMode }}
 
       <b-form>
         <b-form-group
           label="ISBN 번호"
-          label-for="book-isbn"
-          description="등록할 도서의 ISBN 번호를 입력해주세요."
-          :state="Boolean(book.isbn)"
+          label-for="storage-isbn"
+          :description="`${inputModeText}할 도서의 ISBN 번호를 입력해주세요.`"
+          :state="Boolean(storage.isbn)"
         >
           <b-form-input
-            id="book-isbn"
-            v-model="book.isbn"
+            id="storage-isbn"
+            v-model="storage.isbn"
             type="text"
             placeholder="ISBN 번호를 입력해주세요."
-            :state="Boolean(book.isbn)"
-            :disabled="inputMode == '수정'"
+            :state="Boolean(storage.isbn)"
+            :disabled="inputMode === 'update'"
           ></b-form-input>
         </b-form-group>
 
-        <!-- input check -->
-        <div class="mt-3">book.isbn: {{ book.isbn }}, isIsbnNull: {{ Boolean(book.isbn) }}</div>
-
         <b-form-group
-          id="book-image"
-          v-model="book.image"
+          id="storage-image"
+          v-model="storage.image"
           label="도서 이미지"
-          label-for="book-image"
-          :description="`${inputMode}할 도서의 이미지를 첨부해주세요.`"
+          label-for="storage-image"
+          :state="Boolean(storage.image)"
+          :description="`${inputModeText}할 도서의 이미지를 첨부해주세요.`"
         >
           <b-form-file
-            :state="Boolean(book.image)"
+            v-model="storage.image"
+            :state="Boolean(storage.image)"
             placeholder="도서 이미지를 첨부해주세요."
             drop-placeholder="도서 이미지를 끌어다 놔주세요."
           ></b-form-file>
         </b-form-group>
 
-        <!-- input check -->
-        <div class="mt-3">book.image: {{ book.image }}, isImageNull: {{ Boolean(book.image) }}</div>
-
         <b-form-group
           label="도서 리뷰"
-          label-for="book-review"
-          :description="`${inputMode}할 도서의 리뷰를 입력해주세요.`"
-          :state="Boolean(book.review)"
+          label-for="storage-review"
+          :description="`${inputModeText}할 도서의 리뷰를 입력해주세요.`"
+          :state="Boolean(storage.review)"
         >
           <b-form-textarea
-            id="book-review"
-            v-model="book.review"
+            id="storage-review"
+            v-model="storage.review"
             type="text"
-            :placeholder="book.review == null ? '리뷰가 존재하지 않습니다.' : '리뷰를 입력해주세요.'"
+            :placeholder="storage.review == null ? '리뷰가 존재하지 않습니다.' : '리뷰를 입력해주세요.'"
             rows="3"
             max-rows="6"
             no-resize
           ></b-form-textarea>
         </b-form-group>
 
-        <!-- input check -->
-        <div class="mt-3">book.review: {{ book.review }}, isReviewNull: {{ Boolean(book.review) }}</div>
-
-        <b-button type="submit" variant="primary">도서 {{ inputMode }}</b-button>
-        <b-button type="reset" variant="danger" @click="$router.push('/home')">{{ inputMode }} 취소</b-button>
+        <div style="margin-top: 40px">
+          <b-button variant="primary" @click="onSubmit">도서 {{ inputModeText }}</b-button>
+          <b-button variant="danger" @click="$router.push('/home')">{{ inputModeText }} 취소</b-button>
+        </div>
       </b-form>
     </b-container>
   </div>
@@ -73,18 +68,48 @@
 export default {
   data() {
     return {
-      book: {
+      storage: {
         isbn: null,
         image: null,
         review: null
-      },
-      inputMode: '등록'
+      }
     }
   },
   computed: {
-    // inputMode() {
-    //   return '등록'
-    // }
+    infoData() {
+      return this.$store.getters.Storage
+    },
+    inputMode() {
+      return this.$store.getters.StorageInputMode
+    },
+    inputModeText() {
+      return this.inputMode == 'insert' ? '등록' : '수정'
+    }
+  },
+  watch: {
+    // infoData는 regi 화면에 들어온 이후에 감지됩니다.
+    infoData(value) {
+      this.storage = { ...value }
+    }
+  },
+  created() {
+    // created()는 regi 화면이 최초 작성될 때 감지됩니다.
+    this.storage = { ...this.infoData }
+  },
+  methods: {
+    onSubmit() {
+      // 1. 등록인 경우
+      if (this.inputMode === 'insert') {
+        this.$store.dispatch('actStorageInsert', this.storage) // 중고도서 입력 실행
+      }
+
+      // 2. 수정인 경우
+      if (this.inputMode === 'update') {
+        this.$store.dispatch('actStorageUpdate', this.storage) // 중고도서 수정 실행
+      }
+
+      this.$router.push('/home')
+    }
   }
 }
 </script>
