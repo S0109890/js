@@ -1,8 +1,0 @@
-2022-03-10 09:40:23.111[info] app start
-2022-03-10 09:40:25.998[error] DB Connection fail getaddrinfo ENOTFOUND database
-2022-03-10 06:04:00.123[info] app start
-2022-03-10 06:04:01.030[info] DB connection success
-2022-03-10 06:04:01.150[info] Sequelize sync success
-2022-03-10 06:45:44.093[info] app start
-2022-03-10 06:45:44.899[info] DB connection success
-2022-03-10 06:45:44.962[info] Sequelize sync success

@@ -20,11 +20,7 @@ module.exports = class Storage extends Sequelize.Model {
       // },
       // ISBN
       isbn: {
-<<<<<<< HEAD
-        type: Sequelize.STRING,
-=======
         type: Sequelize.STRING(20),
->>>>>>> 1d8ca5f5d2b1433c41c3c08939d53858078dbc82
         allowNull: false,
       },
       // 책 제목
