@@ -8,9 +8,9 @@ const storageService = require('../service/storageService');
 router.post('/', async (req, res) => {
   try {
     const params = {
-      name: req.body.name,
-      code: req.body.code,
-      description: req.body.description,
+      isbn: req.body.isbn,
+      image: req.body.image,
+      review: req.body.review,
     };
     logger.info(`(storage.reg.params) ${JSON.stringify(params)}`);
 
@@ -31,7 +31,8 @@ router.post('/', async (req, res) => {
   } catch (err) {
     res.status(500).json({ err: err.toString() });
   }
-});
+})
 
+// 수정
 
-module.exports = router;
+module.exports = router

@@ -2,10 +2,10 @@ const logger = require('../lib/logger');
 const storageDao = require('../dao/storageDao');
 
 const service = {
-  // storage 입력
+  // 등록할 책 정보 입력
   async reg(params) {
     let inserted = null;
-
+    // 비어있다면 params 들어올 때 까지 기다리기
     try {
       inserted = await storageDao.insert(params);
       logger.debug(`(storageService.reg) ${JSON.stringify(inserted)}`);
@@ -15,7 +15,6 @@ const service = {
         reject(err);
       });
     }
-
     // 결과값 리턴
     return new Promise((resolve) => {
       resolve(inserted);
@@ -25,7 +24,6 @@ const service = {
   // selectList
   async list(params) {
     let result = null;
-
     try {
       result = await storageDao.selectList(params);
       logger.debug(`(storageService.list) ${JSON.stringify(result)}`);
@@ -35,7 +33,6 @@ const service = {
         reject(err);
       });
     }
-
     return new Promise((resolve) => {
       resolve(result);
     });
@@ -44,7 +41,6 @@ const service = {
   // selectInfo
   async info(params) {
     let result = null;
-
     try {
       result = await storageDao.selectInfo(params);
       logger.debug(`(storageService.info) ${JSON.stringify(result)}`);
@@ -54,12 +50,10 @@ const service = {
         reject(err);
       });
     }
-
     return new Promise((resolve) => {
       resolve(result);
     });
   },
-  
   // update
   async edit(params) {
     let result = null;
@@ -78,7 +72,7 @@ const service = {
       resolve(result);
     });
   },
-
+  
   // delelte
   async delete(params) {
     let result = null;

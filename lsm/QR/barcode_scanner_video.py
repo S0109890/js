@@ -33,8 +33,7 @@ def autocrop(image, threshold=0):
 ap = argparse.ArgumentParser()
 ap.add_argument("-o","--output",type=str,default="barcodes.csv",help="path to output CSV file containing barcodes")
 args = vars(ap.parse_args())
-print(ap)
-print(args)
+
 
 #from there, initialize our video stream and open our CSV file
 print("[INFO] starting video stream...")
