@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
   try {
     const client_id = 'qkgbpYoWMqnsIJh0Dcux'
     const client_secret = 'KyABGi7_GI'
-    const api_url = 'https://openapi.naver.com/v1/search/book?query=' + encodeURI(req.query.query); // json 결과
+    const api_url = 'https://openapi.naver.com/v1/search/book?query=' + encodeURIComponent(encodeURIComponent(res.params.title)) // json 결과
     const options = {
         url: api_url,
         headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
