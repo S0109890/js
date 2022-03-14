@@ -24,8 +24,8 @@
         <!-- 임시 데이터 연결 위해 key 값을 임의로 index 지정하였기 때문에 함께 전송하는 파라미터 값에 1이 합산되어 보내집니다.(onClickReview)
         API 연결 후 자체 데이터 id 값으로 수정해야 합니다. -->
         <b-card
-          v-for="(item, index) in storageList"
-          :key="index"
+          v-for="item in storageList"
+          :key="item.id"
           :title="item.title"
           img-src="https://picsum.photos/300/300/?image=41"
           img-alt="Image"
@@ -37,7 +37,7 @@
           <b-card-text v-if="!item.review" style="color: #6c757d; margin-bottom: 35.2px">
             등록된 리뷰가 없습니다.
           </b-card-text>
-          <b-button block variant="primary" class="card-btn" @click="onClickReview(index + 1)">리뷰 보기</b-button>
+          <b-button block variant="primary" class="card-btn" @click="onClickReview(item.id)">리뷰 보기</b-button>
         </b-card>
       </b-card-group>
     </b-container>
