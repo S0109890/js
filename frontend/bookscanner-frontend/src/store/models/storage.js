@@ -201,6 +201,7 @@ export default {
         .then(response => {
           const storage = response && response.data
           context.commit('setStorage', storage)
+          console.log(response.data)
         })
         .catch(err => {
           console.error(err)

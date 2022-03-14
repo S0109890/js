@@ -1,52 +1,80 @@
 const express = require('express');
 const request = require('request');
+const axios = require('axios')
+const dotenv = require('dotenv');
+const { query } = require('../lib/logger');
+
+dotenv.config()
 
 const router = express.Router();
 const logger = require('../lib/logger');
 const storageService = require('../service/storageService');
+const { response } = require('express');
 
-// 상세정보 조회 - 리뷰만 반환 받음
+const client_id = 'qkgbpYoWMqnsIJh0Dcux'
+const client_secret = 'KyABGi7_GI'
+
+
+// 상세정보 조회
 router.get('/:id', async (req, res) => {
   try {
-    const params = {
-      id: req.params.id,
-    };
+    const params = { id: req.params.id, }
     logger.info(`(storage.info.params) ${JSON.stringify(params)}`);
-
+    
     const result = await storageService.info(params);
     logger.info(`(storage.info.result) ${JSON.stringify(result)}`);
+    // 최종 응답
+    res.status(200).json(result)
+
+    console.log(result.isbn)
+    console.log(result)
+
+    // 네이버 상세정보 조회
+    const naver_res = await axios.get('https://openapi.naver.com/v1/search/book.json',{
+      headers: {
+        'X-Naver-Client-Id' : 'qkgbpYoWMqnsIJh0Dcux', 
+        'X-Naver-Client-Secret' : 'KyABGi7_GI',
+      }, 
+      params: {
+        query : result.isbn
+      }
+    })
+    .then(response => { return JSON.stringify(response.data.items) })
+    .catch(err => { console.log(err) })
+    console.log(naver_res)
+  } catch (err) {
+    res.status(500).json({ err: err.toString() });
+  }
+})
+
+// 리뷰 수정 
+router.put('/', async (req, res) => {
+  try {
+    const params = {
+      isbn: req.body.isbn,
+      image: req.body.image,
+      review: req.body.review,
+    };
+    logger.info(`(storage.edit.params) ${JSON.stringify(params)}`);
+
+    // 입력값 null 체크
+    if (!params.review) {
+      const err = new Error('Not allowed null (name)');
+      logger.error(err.toString());
+
+      res.status(500).json({ err: err.toString() });
+    }
+
+    // 비즈니스 로직 호출
+    const result = await storageService.edit(params);
+    logger.info(`(storage.edit.result) ${JSON.stringify(result)}`);
 
     // 최종 응답
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ err: err.toString() });
   }
-
-  try {
-    const client_id = 'qkgbpYoWMqnsIJh0Dcux'
-    const client_secret = 'KyABGi7_GI'
-    const api_url = 'https://openapi.naver.com/v1/search/book?query=' + encodeURIComponent(encodeURIComponent(res.params.title)) // json 결과
-    const options = {
-        url: api_url,
-        headers: {'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret}
-     };
-    request.get(options, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        res.writeHead(200, {'Content-Type': 'text/json;charset=utf-8'});
-        res.end(body);
-      } else {
-        res.status(response.statusCode).end();
-        console.log('error = ' + response.statusCode);
-      }
-    })
-  } catch (err) { 
-    res.status(500).json({ err: err.toString() })
-    console.error("Naver API 통신 에러 발생")
-  }
 })
-
-// 리뷰 수정 
-
 
 // 리뷰 삭제
 router.delete('/', async (req, res) => {

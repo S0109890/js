@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
       review: req.body.review,
     };
     logger.info(`(storage.reg.params) ${JSON.stringify(params)}`);
-
+    
     // 입력값 null 체크
     if (!params.isbn) {
       const err = new Error('Not allowed null (name)');
@@ -34,5 +34,32 @@ router.post('/', async (req, res) => {
 })
 
 // 수정
+router.put('/', async (req, res) => {
+  try {
+    const params = {
+      isbn: req.body.isbn,
+      image: req.body.image,
+      review: req.body.review,
+    };
+    logger.info(`(storage.edit.params) ${JSON.stringify(params)}`);
+
+    // 입력값 null 체크
+    if (!params.isbn) {
+      const err = new Error('Not allowed null (name)');
+      logger.error(err.toString());
+
+      res.status(500).json({ err: err.toString() });
+    }
+
+    // 비즈니스 로직 호출
+    const result = await storageService.edit(params);
+    logger.info(`(storage.edit.result) ${JSON.stringify(result)}`);
+
+    // 최종 응답
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ err: err.toString() });
+  }
+})
 
 module.exports = router
