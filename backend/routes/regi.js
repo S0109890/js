@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
     logger.info(`(storage.reg.params) ${JSON.stringify(params)}`);
 
     // 입력값 null 체크
-    if (!params.name) {
+    if (!params.isbn) {
       const err = new Error('Not allowed null (name)');
       logger.error(err.toString());
 
