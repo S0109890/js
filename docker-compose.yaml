@@ -65,7 +65,7 @@ services:
 #       - ./mqtt-simulator-main/volume:/home/server
 #     command: ["/bin/bash"]
 #     ports:
-#       - "3002:3000"
+#       - "3002:3002"
 #     tty: true
 #     stdin_open: true
 #     networks:
