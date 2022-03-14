@@ -54,7 +54,6 @@ const service = {
       resolve(result);
     });
   },
-
   // update
   async edit(params) {
     let result = null;
