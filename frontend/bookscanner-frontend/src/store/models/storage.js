@@ -113,7 +113,7 @@ export default {
       api
         .get(`/serverApi/review/${payload}`)
         .then(response => {
-          const storage = response && response.data
+          const storage = response && response.data.dataValues
           context.commit('setStorage', storage)
           console.log(response.data)
         })
