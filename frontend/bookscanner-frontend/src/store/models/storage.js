@@ -113,9 +113,9 @@ export default {
       api
         .get(`/serverApi/review/${payload}`)
         .then(response => {
-          const storage = response && response.data.dataValues
+          const storage = response && [response.data.dataValues, response.data.result_2]
           context.commit('setStorage', storage)
-          console.log(response.data)
+          console.log(storage)
         })
         .catch(err => {
           console.error(err)

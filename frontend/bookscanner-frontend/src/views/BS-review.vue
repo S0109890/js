@@ -5,7 +5,7 @@
         <template #header>
           <b-row>
             <b-col
-              ><h4 class="card-title" style="margin-bottom: 0">{{ storageInfo.title }}</h4></b-col
+              ><h4 class="card-title" style="margin-bottom: 0">{{ naverData[0].title }}</h4></b-col
             >
             <b-col class="data-btn">
               <b-button size="sm" variant="primary" @click="onClickEdit()">수정</b-button>
@@ -14,16 +14,16 @@
           </b-row>
         </template>
         <b-row no-gutters>
-          <b-col md="4">
-            <b-card-img src="https://placekitten.com/380/200" img-left alt="Image" class="rounded-0"></b-card-img>
+          <b-col md="1">
+            <b-card-img :src="naverData[0].image" img-left alt="Image" class="rounded-0"></b-card-img>
           </b-col>
-          <b-col id="review-data" md="8">
+          <b-col id="review-data" md="11">
             <b-card-body
               :title="storageInfo.isbn"
-              :sub-title="`${storageInfo.author} | ${storageInfo.publisher} | ${storageInfo.price} | ${storageInfo.location}`"
+              :sub-title="`${naverData[0].author} | ${naverData[0].publisher} | ${naverData[0].price}원 | 출간일: ${naverData[0].pubdate}`"
             >
               <b-card-text>
-                {{ storageInfo.description }}
+                {{ naverData[0].description }}
               </b-card-text>
             </b-card-body>
           </b-col>
@@ -71,7 +71,10 @@ export default {
   },
   computed: {
     infoData() {
-      return this.$store.getters.Storage
+      return this.$store.getters.Storage[0]
+    },
+    naverData() {
+      return this.$store.getters.Storage[1]
     }
   },
   watch: {
