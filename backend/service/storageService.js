@@ -70,7 +70,7 @@ const service = {
         query : params.isbn
       }
       })
-      .then(result => { return result.data.items })
+      .then(result => { return JSON.stringify(result.data.items) })
       .catch(err => { console.log(err) })
       logger.debug(`(storageService.more_info) ${result}`);
     } catch (err) {
