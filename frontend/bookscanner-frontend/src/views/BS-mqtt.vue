@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import mqtt from 'mqtt'
+import { connect } from 'mqtt'
 
 export default {
   data() {
@@ -15,13 +15,13 @@ export default {
       mqttDataList: [] // mqtt를 통해 받은 데이터 (리스트로 계속 추가됨)
     }
   },
-  mounted() {
+  created() {
     this.createMqtt()
   },
   methods: {
     createMqtt() {
       // mqtt 연결
-      const mqttClient = mqtt.connect(process.env.VUE_APP_MQTT)
+      const mqttClient = connect(process.env.VUE_APP_MQTT)
 
       mqttClient.on('connect', () => {
         // mqtt 연결 시 구독한다.
