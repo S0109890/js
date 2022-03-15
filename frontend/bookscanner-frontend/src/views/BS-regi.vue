@@ -2,8 +2,6 @@
   <div>
     <b-container id="write-section" fluid>
       <h2 style="margin-bottom: 40px">도서 {{ inputModeText }}</h2>
-      <!-- inputMode check -->
-      inputMode: {{ inputMode }}
 
       <b-form>
         <b-form-group

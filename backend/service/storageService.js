@@ -103,6 +103,24 @@ const service = {
     });
   },
   
+  // delete_review
+  async delete_review(params) {
+    let result = null;
+
+    try {
+      result = await storageDao.delete_review(params);
+      logger.debug(`(storageService.delete_review) ${JSON.stringify(result)}`);
+    } catch (err) {
+      logger.error(`(storageService.delete_review) ${err.toString()}`);
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+    return new Promise((resolve) => {
+      resolve(result);
+    });
+  },
+
   // delelte
   async delete(params) {
     let result = null;

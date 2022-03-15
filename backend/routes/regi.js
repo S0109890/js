@@ -49,9 +49,10 @@ router.post('/', async (req, res) => {
 
 
 // 수정
-router.put('/', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const params = {
+      id: req.params.id,
       isbn: req.body.isbn,
       image: req.body.image,
       review: req.body.review,

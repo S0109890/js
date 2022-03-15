@@ -82,11 +82,27 @@ const dao = {
     })
   },
   
+  // 리뷰 삭제
+  delete_review(params) {
+    return new Promise((resolve, reject) => {
+      Storage.update(
+        {
+          set: null,
+          where: { id: params.id },
+        },
+      ).then(([updated]) => {
+        resolve({ updatedCount: updated })
+      }).catch((err) => {
+        reject(err)
+      })
+    })
+  },
+
   // 삭제
   delete(params) {
     return new Promise((resolve, reject) => {
       Storage.destroy({
-        where: { params },
+        where: { id: params.id },
       }).then((deleted) => {
         resolve({ deletedCount: deleted })
       }).catch((err) => {
