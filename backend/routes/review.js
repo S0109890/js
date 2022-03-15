@@ -32,8 +32,8 @@ router.get('/:id', async (req, res) => {
     // 네이버 상세정보 조회
     const naver_res = await axios.get('https://openapi.naver.com/v1/search/book.json',{
       headers: {
-        'X-Naver-Client-Id' : 'qkgbpYoWMqnsIJh0Dcux', 
-        'X-Naver-Client-Secret' : 'KyABGi7_GI',
+        'X-Naver-Client-Id' : client_id, 
+        'X-Naver-Client-Secret' : client_secret,
       }, 
       params: {
         query : result.isbn
@@ -41,16 +41,17 @@ router.get('/:id', async (req, res) => {
     })
     .then(response => { return JSON.stringify(response.data.items) })
     .catch(err => { console.log(err) })
-    console.log(naver_res)
+    console.log(naver_ress)
   } catch (err) {
     res.status(500).json({ err: err.toString() });
   }
 })
 
 // 리뷰 수정 
-router.put('/', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const params = {
+      id: req.params.id,
       isbn: req.body.isbn,
       image: req.body.image,
       review: req.body.review,
@@ -77,14 +78,36 @@ router.put('/', async (req, res) => {
 })
 
 // 리뷰 삭제
-router.delete('/', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
-    const params = { id: req.body.id }
-    logger.info(`(storage.delete.params) ${JSON.stringify(params)}`);
+    const params = {
+      id: req.params.id,
+      review: req.body.review
+    }
+    logger.info(`(storage.reviewDelete.params) ${JSON.stringify(params)}`);
+
+    // 비즈니스 로직 호출
+    const result = await storageService.edit(params);
+    logger.info(`(storage.reviewDelete.result) ${JSON.stringify(result)}`);
+
+    // 최종 응답
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ err: err.toString() });
+  }
+})
+
+// 도서 삭제
+router.delete('/:id', async (req, res) => {
+  try {
+    const params = {
+      id: req.params.id
+    }
+    logger.info(`(storage.delete.params) ${JSON.stringify(params)}`)
 
     // 비즈니스 로직 호출
     const result = await storageService.delete(params);
-    logger.info(`(storage.delete.result) ${JSON.stringify(result)}`);
+    logger.info(`(storage.delete.result) ${JSON.stringify(result)}`)
 
     // 최종 응답
     res.status(200).json(result);

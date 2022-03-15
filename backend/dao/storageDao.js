@@ -86,7 +86,7 @@ const dao = {
   delete(params) {
     return new Promise((resolve, reject) => {
       Storage.destroy({
-        where: { params },
+        where: { id: params.id },
       }).then((deleted) => {
         resolve({ deletedCount: deleted })
       }).catch((err) => {
