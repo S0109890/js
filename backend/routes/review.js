@@ -25,11 +25,8 @@ router.get('/:id', async (req, res) => {
     // 네이버 상세정보 조회
     const result_2 = await storageService.more_info(result_1);
     logger.info(`(storage.more_info.result) ${result_2}`);
-    // const result_2_json = {...result_2}
-    const result_2_pop = result_2.slice(1,546)
-    const result = { ...result_1, result_2_pop}
-    // const result = result_1.push(result_2)
-    console.log(`result = ${ result }`)
+    const result = { ...result_1, result_2}
+    // console.log(`result = ${ result }`)
     // 최종 응답
     res.status(200).json(result)
   } catch (err) {
