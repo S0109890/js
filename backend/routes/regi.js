@@ -7,13 +7,26 @@ const storageService = require('../service/storageService');
 // 등록
 router.post('/', async (req, res) => {
   try {
+    // // 네이버 상세정보 조회
+    // const naver_res = await axios.get('https://openapi.naver.com/v1/search/book.json',{
+    //   headers: {
+    //     'X-Naver-Client-Id' : 'qkgbpYoWMqnsIJh0Dcux', 
+    //     'X-Naver-Client-Secret' : 'KyABGi7_GI',
+    //   }, 
+    //   params: {
+    //     query : req.body.isbn
+    //   }
+    // })
+    // .then(response => { return JSON.stringify(response.data.items) })
+    // .catch(err => { console.log(err) })
+
     const params = {
       isbn: req.body.isbn,
       image: req.body.image,
       review: req.body.review,
     };
     logger.info(`(storage.reg.params) ${JSON.stringify(params)}`);
-    
+
     // 입력값 null 체크
     if (!params.isbn) {
       const err = new Error('Not allowed null (name)');
@@ -32,6 +45,8 @@ router.post('/', async (req, res) => {
     res.status(500).json({ err: err.toString() });
   }
 })
+
+
 
 // 수정
 router.put('/', async (req, res) => {

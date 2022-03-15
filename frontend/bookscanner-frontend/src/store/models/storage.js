@@ -86,7 +86,8 @@ export default {
 
       // RestAPI 호출
       api
-        .get('/serverApi/home', { params: payload })
+        // eslint-disable-next-line
+        .get('/serverApi/home',payload)
         .then(response => {
           const storageList = response && response.data && response.data.rows
           context.commit('setStorageList', storageList)

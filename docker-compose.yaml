@@ -45,21 +45,23 @@ services:
     restart: always
     command: "npm start"
 
-  # frontend build
+  # # frontend build
   # frontend:
   #   container_name: book_frontend
+  #   depends_on:
+  #     - backend
   #   build: ./frontend/bookscanner-frontend
   #   image: book_frontend
   #   volumes:
   #     - ./frontend/bookscanner-frontend:/app
   #   ports:
   #     - "8080:8080"
+  #   restart: always
 
 # # MQTT server build
 #   mqtt:
 #     image: eclipse-mosquitto
 #     hostname: mosquitto
-#     restart: always
 #     ports:
 #       - "1883:1883"
 #       - "9001:9001"
