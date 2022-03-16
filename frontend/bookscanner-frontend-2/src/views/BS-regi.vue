@@ -21,6 +21,22 @@
         </b-form-group>
 
         <b-form-group
+          id="storage-image"
+          v-model="storage.image"
+          label="도서 이미지"
+          label-for="storage-image"
+          :state="Boolean(storage.image)"
+          :description="`${inputModeText}할 도서의 이미지를 첨부해주세요.`"
+        >
+          <b-form-file
+            v-model="storage.image"
+            :state="Boolean(storage.image)"
+            placeholder="도서 이미지를 첨부해주세요."
+            drop-placeholder="도서 이미지를 끌어다 놔주세요."
+          ></b-form-file>
+        </b-form-group>
+
+        <b-form-group
           label="도서 리뷰"
           label-for="storage-review"
           :description="`${inputModeText}할 도서의 리뷰를 입력해주세요.`"
