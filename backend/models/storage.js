@@ -10,37 +10,24 @@ module.exports = class Storage extends Sequelize.Model {
         allowNull: false,
         autoIncrement: true,
       },
-      // 일련번호, PK, 100000 이상의 값 자동 부여 >>> 우선은 자동생성되는 id 값으로 대체
-      // s_num: {
-      //   type: Sequelize.INTEGER(5),
-      //   unique: true,
-      //   validate: {
-      //     min: 10000,
-      //   },
-      // },
       // ISBN
       isbn: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING,
         allowNull: false,
       },
       // 책 제목
       title: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       // 저자
       author: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
       },
-      // 책 위치
-      location: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      // 책 가격
-      price: {
-        type: Sequelize.INTEGER,
+      // 출판사
+      publisher: {
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       // 책 사진
@@ -54,6 +41,25 @@ module.exports = class Storage extends Sequelize.Model {
       //  리뷰
       review: {
         type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      // 네이버 북스 링크
+      link: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+        validate: {
+          isUrl: true
+        }
+      },
+      // 관리자가 입력해야 하는 부분
+      // 책 위치
+      location: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      // 책 가격
+      price: {
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
     }, {

@@ -57,6 +57,8 @@ app.use(function (err, req, res, next) {
 models.sequelize.authenticate().then(() => {
   logger.info('DB connection success')
 
+    // sequelize sync (다 지우고 싹 다시 table 생성)
+    // models.sequelize.sync({force:true}).then(() => {
     // sequelize sync (table 생성)
     models.sequelize.sync().then(() => {
       logger.info('Sequelize sync success');

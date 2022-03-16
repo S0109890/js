@@ -8,25 +8,15 @@ const storageService = require('../service/storageService');
 const { response } = require('express');
 const { DataTypes } = require("sequelize");
 
-const client_id = 'qkgbpYoWMqnsIJh0Dcux'
-const client_secret = 'KyABGi7_GI'
-
-
 // 상세정보 조회
 router.get('/:id', async (req, res) => {
   try {
     const params = { id: req.params.id, }
     logger.info(`(storage.info.params) ${JSON.stringify(params)}`);
     
-    const result_1 = await storageService.info(params);
-    logger.info(`(storage.info.result) ${JSON.stringify(result_1)}`);  
-    //result_1 = [object SequelizeInstance:Storage]   
+    const result = await storageService.info(params);
+    logger.info(`(storage.info.result) ${JSON.stringify(result)}`);  
 
-    // 네이버 상세정보 조회
-    const result_2 = await storageService.more_info(result_1);
-    logger.info(`(storage.more_info.result) ${result_2}`);
-    const result = { ...result_1, result_2}
-    // console.log(`result = ${ result }`)
     // 최종 응답
     res.status(200).json(result)
   } catch (err) {
@@ -39,8 +29,6 @@ router.put('/:id', async (req, res) => {
   try {
     const params = {
       id: req.params.id,
-      isbn: req.body.isbn,
-      image: req.body.image,
       review: req.body.review,
     };
     logger.info(`(storage.edit.params) ${JSON.stringify(params)}`);

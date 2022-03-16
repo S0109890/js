@@ -40,6 +40,33 @@ const service = {
     });
   },
 
+  // NAVER book API search
+  async more_info(params) {
+    let result = null;
+    try {
+      result = await axios.get('https://openapi.naver.com/v1/search/book.json',{
+      headers: {
+        'X-Naver-Client-Id' : 'qkgbpYoWMqnsIJh0Dcux', 
+        'X-Naver-Client-Secret' : 'KyABGi7_GI',
+      }, 
+      params: {
+        query : params
+      }
+      })
+      .then(result => { return result.data.items })
+      .catch(err => { console.log(err) })
+      logger.debug(`(storageService.more_info) ${result}`);
+    } catch (err) {
+      logger.error(`(storageService.more_info) ${err.toString()}`);
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+    return new Promise((resolve) => {
+      resolve(result);
+    });
+  },
+  
   // selectInfo
   async info(params) {
     let result = null;
@@ -57,32 +84,6 @@ const service = {
     });
   },
 
-  // NAVER book API search
-  async more_info(params) {
-    let result = null;
-    try {
-      result = await axios.get('https://openapi.naver.com/v1/search/book.json',{
-      headers: {
-        'X-Naver-Client-Id' : 'qkgbpYoWMqnsIJh0Dcux', 
-        'X-Naver-Client-Secret' : 'KyABGi7_GI',
-      }, 
-      params: {
-        query : params.isbn
-      }
-      })
-      .then(result => { return result.data.items })
-      .catch(err => { console.log(err) })
-      logger.debug(`(storageService.more_info) ${result}`);
-    } catch (err) {
-      logger.error(`(storageService.more_info) ${err.toString()}`);
-      return new Promise((resolve, reject) => {
-        reject(err);
-      });
-    }
-    return new Promise((resolve) => {
-      resolve(result);
-    });
-  },
 
   // update
   async edit(params) {
@@ -97,7 +98,6 @@ const service = {
         reject(err);
       });
     }
-
     return new Promise((resolve) => {
       resolve(result);
     });

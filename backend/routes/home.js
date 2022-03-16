@@ -31,7 +31,7 @@ router.get('/:req', async (req, res) => {
     const params = { req }
     logger.info(`(storage.info.params) ${JSON.stringify(params)}`)
 
-    const result = await storageService.info(params);
+    const result = await storageService.list(params);
     logger.info(`(storage.info.result) ${JSON.stringify(result)}`)
 
     // 최종 응답
