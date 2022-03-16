@@ -7,12 +7,7 @@ const storageService = require('../service/storageService');
 // 리스트 조회
 router.get('/', async (req, res) => {
   try {
-    const params = {
-      title: req.query.title,
-      author: req.query.author,
-      image: req.query.image,
-      discription: req.query.discription,
-    };
+    const params = {   };
     logger.info(`(storage.list.params) ${JSON.stringify(params)}`);
 
     const result = await storageService.list(params);
@@ -28,7 +23,10 @@ router.get('/', async (req, res) => {
 // 검색 결과 - 리스트 조회
 router.get('/:req', async (req, res) => {
   try {
-    const params = { req }
+    const params = { 
+      title: req.body.title,
+      author: req.body.author, 
+    }
     logger.info(`(storage.list.params) ${JSON.stringify(params)}`)
 
     const result = await storageService.list(params);
