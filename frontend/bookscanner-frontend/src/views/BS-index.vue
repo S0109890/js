@@ -23,8 +23,14 @@
       <b-card-group deck>
         <!-- 임시 데이터 연결 위해 key 값을 임의로 index 지정하였기 때문에 함께 전송하는 파라미터 값에 1이 합산되어 보내집니다.(onClickReview)
         API 연결 후 자체 데이터 id 값으로 수정해야 합니다. -->
-        <b-card v-for="item in storageList" :key="item.id" :title="item.title" img-alt="Image" img-top>
-          <b-card-img v-for="item in naverData" :key="item.isbn" :src="item.image"></b-card-img>
+        <b-card
+          v-for="item in storageList"
+          :key="item.id"
+          :title="item.title"
+          :img-src="item.image"
+          img-alt="Image"
+          img-top
+        >
           <b-card-text v-if="item.review">
             {{ item.review }}
           </b-card-text>
@@ -65,11 +71,6 @@ export default {
     },
     deletedResult() {
       return this.$store.getters.StorageDeletedResult
-    },
-
-    // 상세정보 computed 입니다.
-    naverData() {
-      return this.$store.getters.Storage[1]
     }
   },
   watch: {

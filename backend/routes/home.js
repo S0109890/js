@@ -29,10 +29,10 @@ router.get('/', async (req, res) => {
 router.get('/:req', async (req, res) => {
   try {
     const params = { req }
-    logger.info(`(storage.info.params) ${JSON.stringify(params)}`)
+    logger.info(`(storage.list.params) ${JSON.stringify(params)}`)
 
-    const result = await storageService.info(params);
-    logger.info(`(storage.info.result) ${JSON.stringify(result)}`)
+    const result = await storageService.list(params);
+    logger.info(`(storage.list.result) ${JSON.stringify(result)}`)
 
     // 최종 응답
     res.status(200).json(result);
