@@ -9,7 +9,9 @@ router.post('/', async (req, res) => {
   try {
     const params = {
       isbn: req.body.isbn,
-      review: req.body.review,
+      price: req.body.price,
+      location: req.body.location,
+      review: req.body.review
     }
   
     // 입력값 null 체크
@@ -26,11 +28,13 @@ router.post('/', async (req, res) => {
     const params_list = { ...params, result_2 }
     const total_params = {
       isbn: params_list.isbn,
+      review: params_list.review,
+      price: params_list.price,
+      location: params_list.location,
       title: params_list.result_2[0].title,
       author: params_list.result_2[0].author,
       publisher: params_list.result_2[0].publisher,
       image: params_list.result_2[0].image,
-      review: params_list.review,
       link: params_list.result_2[0].link,
     }
     logger.info(`(storage.reg.params) ${JSON.stringify(total_params)}`)

@@ -20,7 +20,7 @@
           <b-col id="review-data" md="11">
             <b-card-body
               :title="storageInfo.isbn"
-              :sub-title="`${storageInfo.author} | ${storageInfo.publisher} | ${storageInfo.price}원 | 출간일: ${storageInfo.pubdate}`"
+              :sub-title="`${storageInfo.author} | ${storageInfo.publisher} | ${storageInfo.price}원 | ${storageInfo.location} | 출간일: ${storageInfo.pubdate}`"
             >
               <b-card-text>
                 {{ storageInfo.description }}
@@ -71,7 +71,7 @@ export default {
   },
   computed: {
     infoData() {
-      return this.$store.getters.Storage[0]
+      return this.$store.getters.Storage
     }
   },
   watch: {

@@ -64,7 +64,7 @@ export default {
 
       // RestAPI 호출
       api
-        .get('/serverApi/home', payload)
+        .get('/serverApi/home', { params: payload })
         .then(response => {
           const storageList = response && response.data && response.data.rows
           context.commit('setStorageList', storageList)
@@ -72,6 +72,7 @@ export default {
         })
         .catch(err => {
           console.error(err)
+          context.commit('setStorageList', [])
         })
     },
 
@@ -82,10 +83,11 @@ export default {
 
       // RestAPI 호출
       api
-        .post('/serverApi/regi', payload)
+        .post('/serverApi/regi', { ...payload, price: parseInt(payload.price) })
         .then(response => {
           const insertedResult = response && response.data && response.data.id
           context.commit('setInsertedResult', insertedResult)
+          console.log(payload)
         })
         .catch(err => {
           console.error(err)
@@ -113,7 +115,7 @@ export default {
       api
         .get(`/serverApi/review/${payload}`)
         .then(response => {
-          const storage = response && [response.data.dataValues, response.data.result_2]
+          const storage = response && response.data
           context.commit('setStorage', storage)
           console.log(storage)
         })

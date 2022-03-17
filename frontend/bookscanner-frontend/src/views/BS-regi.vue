@@ -21,6 +21,36 @@
         </b-form-group>
 
         <b-form-group
+          label="중고도서 가격"
+          label-for="storage-price"
+          :description="`${inputModeText}할 도서의 가격을 입력해주세요.`"
+          :state="Boolean(storage.price)"
+        >
+          <b-form-input
+            id="storage-price"
+            v-model="storage.price"
+            type="text"
+            placeholder="도서 가격을 입력해주세요."
+            :state="Boolean(storage.price)"
+          ></b-form-input>
+        </b-form-group>
+
+        <b-form-group
+          label="중고도서 위치"
+          label-for="storage-location"
+          :description="`${inputModeText}할 도서의 위치를 입력해주세요.`"
+          :state="Boolean(storage.location)"
+        >
+          <b-form-input
+            id="storage-location"
+            v-model="storage.location"
+            type="text"
+            placeholder="도서 위치를 입력해주세요."
+            :state="Boolean(storage.location)"
+          ></b-form-input>
+        </b-form-group>
+
+        <b-form-group
           label="도서 리뷰"
           label-for="storage-review"
           :description="`${inputModeText}할 도서의 리뷰를 입력해주세요.`"
@@ -52,7 +82,8 @@ export default {
     return {
       storage: {
         isbn: null,
-        image: null,
+        price: null,
+        location: null,
         review: null
       }
     }
@@ -80,17 +111,19 @@ export default {
   },
   methods: {
     onSubmit() {
-      // 1. 등록인 경우
-      if (this.inputMode === 'insert') {
-        this.$store.dispatch('actStorageInsert', this.storage) // 중고도서 입력 실행
-      }
+      if (this.storage.isbn) {
+        // 1. 등록인 경우
+        if (this.inputMode === 'insert') {
+          this.$store.dispatch('actStorageInsert', this.storage) // 중고도서 입력 실행
+        }
 
-      // 2. 수정인 경우
-      if (this.inputMode === 'update') {
-        this.$store.dispatch('actStorageUpdate', this.storage) // 중고도서 수정 실행
-      }
+        // 2. 수정인 경우
+        if (this.inputMode === 'update') {
+          this.$store.dispatch('actStorageUpdate', this.storage) // 중고도서 수정 실행
+        }
 
-      this.$router.push('/home')
+        this.$router.push('/home')
+      }
     }
   }
 }

@@ -7,7 +7,10 @@ const storageService = require('../service/storageService');
 // 리스트 조회
 router.get('/', async (req, res) => {
   try {
-    const params = {   };
+    const params = { 
+      title: req.query.title,
+      author: req.query.author, 
+     };
     logger.info(`(storage.list.params) ${JSON.stringify(params)}`);
 
     const result = await storageService.list(params);
@@ -21,23 +24,25 @@ router.get('/', async (req, res) => {
 });
 
 // 검색 결과 - 리스트 조회
-router.get('/:req', async (req, res) => {
-  try {
-    const params = { 
-      title: req.body.title,
-      author: req.body.author, 
-    }
-    logger.info(`(storage.list.params) ${JSON.stringify(params)}`)
+// router.get('/:req', async (req, res) => {
+//   try {
+//     const params = { 
+//       title: req.body.title,
+//       author: req.body.author, 
+//     }
 
-    const result = await storageService.list(params);
-    logger.info(`(storage.list.result) ${JSON.stringify(result)}`)
+//     console.log(params)
+//     logger.info(`(storage.list.params) ${JSON.stringify(params)}`)
 
-    // 최종 응답
-    res.status(200).json(result);
-  } catch (err) {
-    res.status(500).json({ err: err.toString() });
-  }
-});
+//     const result = await storageService.list(params);
+//     logger.info(`(storage.list.result) ${JSON.stringify(result)}`)
+
+//     // 최종 응답
+//     res.status(200).json(result);
+//   } catch (err) {
+//     res.status(500).json({ err: err.toString() });
+//   }
+// });
 
 
 module.exports = router;
