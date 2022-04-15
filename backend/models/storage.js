@@ -1,6 +1,7 @@
 const { Model } = require('sequelize')
 const Sequelize = require('sequelize')
 
+//DB 테이블 생성
 module.exports = class Storage extends Sequelize.Model {
   static init(sequelize) {
     return super.init({
@@ -30,14 +31,14 @@ module.exports = class Storage extends Sequelize.Model {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      // 책 사진
-      image: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        validate: {
-          isUrl: true
-        }
-      },
+      // // 책 사진
+      // image: {
+      //   type: Sequelize.STRING,
+      //   allowNull: true,
+      //   validate: {
+      //     isUrl: true
+      //   }
+      // },
       //  리뷰
       review: {
         type: Sequelize.TEXT,
@@ -68,7 +69,7 @@ module.exports = class Storage extends Sequelize.Model {
       freezeTableName: true, // true: table명의 복수형 변환을 막음
       underscored: true, // true: underscored, false: camelCase
       timestamps: true, // createAt, updatedAt
-      paranoid: true, // deletedAt
+      paranoid: false, // deletedAt
       charset: 'utf8mb4', 
       collate: 'utf8mb4_general_ci', // 한글 및 이모티콘 입력 허용
     })

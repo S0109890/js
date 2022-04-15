@@ -13,7 +13,8 @@
         ></b-form-input>
 
         <template #append>
-          <b-button variant="primary" @click="searchStorageList(searchInput)">검색</b-button>
+          <!-- <b-button variant="primary" @click="searchStorageList(searchInput)">검색</b-button> -->
+          <b-button variant="primary" @click="onClickSearch(searchInput)">검색</b-button>
         </template>
       </b-input-group>
     </b-container>
@@ -24,7 +25,7 @@
         <!-- 임시 데이터 연결 위해 key 값을 임의로 index 지정하였기 때문에 함께 전송하는 파라미터 값에 1이 합산되어 보내집니다.(onClickReview)
         API 연결 후 자체 데이터 id 값으로 수정해야 합니다. -->
         <b-card
-          v-for="item in storageList"
+          v-for="item in storageList.rows"
           :key="item.id"
           :title="item.title"
           :img-src="item.image"
@@ -33,6 +34,7 @@
         >
           <b-card-text v-if="item.review">
             {{ item.review }}
+            {{ item.id }}
           </b-card-text>
           <b-card-text v-if="!item.review" style="color: #6c757d; margin-bottom: 35.2px">
             등록된 리뷰가 없습니다.
@@ -48,6 +50,20 @@
 export default {
   data() {
     return {
+      fields: [
+        { key: 'id', label: 'id' },
+        { key: 'isbn', label: 'ISBN' },
+        { key: 'title', label: '제목' },
+        { key: 'author', label: '저자' },
+        { key: 'publisher', label: '출판사' },
+        { key: 'review', label: '리뷰' },
+        { key: 'link', label: '링크' },
+        { key: 'location', label: '도서위치' },
+        { key: 'price', label: '가격' },
+        { key: 'createdAt', label: '생성일' },
+        { key: 'updateBtn', label: '수정' },
+        { key: 'deleteBtn', label: '삭제' }
+      ],
       // 제목 & 저자명 search 위한 변수들입니다.
       select: [
         { text: '제목', value: 'title' },
@@ -58,22 +74,34 @@ export default {
     }
   },
   computed: {
+    //값이 변하면 값을 반영함
     storageList() {
       return this.$store.getters.StorageList
     },
-
+    storage() {
+      return this.$store.getters.Storage
+    },
     // 도서정보 제어 computed 입니다.
     insertedResult() {
+      //중고 도서 등록 처리 후 결과 반영
       return this.$store.getters.StorageInsertedResult
     },
     updatedResult() {
+      //중고 도서 정보 수정 후 처리 결과 반영
       return this.$store.getters.StorageUpdatedResult
     },
     deletedResult() {
+      //중고도서 삭제 후 정보 처리 결과
       return this.$store.getters.StorageDeletedResult
     }
   },
   watch: {
+    //모달이 열린 이후에 감지됨 : 컴퓨트에서 바뀐 값 계속 받아옴.
+    storage(value) {
+      // 2. 리스트 재검색
+      let searchID = value.rows
+      console.log('reload', searchID)
+    },
     insertedResult(value) {
       // 등록 후 처리
       if (value !== null) {
@@ -153,16 +181,23 @@ export default {
     }
   },
   created() {
-    this.searchStorageList()
+    // 최초 열릴때 감지됨
+    this.init()
   },
   methods: {
-    searchStorageList(searchInput) {
+    init() {
+      console.log('처음페이지')
+      // 2. 리스트 재검색
+      this.searchStorageList()
+    },
+    onClickSearch(searchInput) {
+      //검색하기
       if (searchInput) {
         if (this.selectSearch === 'title') {
-          this.$store.dispatch('actStorageList', { title: searchInput })
+          this.$store.dispatch('actStorageInfo', { title: searchInput })
         }
         if (this.selectSearch === 'author') {
-          this.$store.dispatch('actStorageList', { author: searchInput })
+          this.$store.dispatch('actStorageInfo', { author: searchInput })
         }
       } else {
         this.$store.dispatch('actStorageList')
@@ -170,9 +205,13 @@ export default {
     },
 
     onClickReview(id) {
-      // 중고도서 상세정보
-      this.$store.dispatch('actStorageInfo', id)
-      this.$router.push('/review')
+      // 중고도서 상세정보 id = 입력인풋
+      this.$store.dispatch('actStorageReview', id)
+      this.$router.push(`/review`)
+    },
+    searchStorageList() {
+      //리스트 불러오기
+      this.$store.dispatch('actStorageList')
     }
   }
 }

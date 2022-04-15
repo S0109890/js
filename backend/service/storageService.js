@@ -23,7 +23,7 @@ const service = {
     });
   },
 
-  // selectList
+  // selectList 리스트 불러오기
   async list(params) {
     let result = null;
     try {
@@ -67,7 +67,7 @@ const service = {
     });
   },
   
-  // selectInfo
+  // selectInfo 리뷰상세 보기
   async info(params) {
     let result = null;
     try {
@@ -75,6 +75,23 @@ const service = {
       logger.debug(`(storageService.info) ${JSON.stringify(result)}`);
     } catch (err) {
       logger.error(`(storageService.info) ${err.toString()}`);
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+    return new Promise((resolve) => {
+      resolve(result);
+    });
+  },
+
+  //DAO 검색 타이틀 저자 word Search
+  async search(params) {
+    let result = null;
+    try {
+      result = await storageDao.selectSearch(params);
+      logger.debug(`(storageService.search) ${JSON.stringify(result)}`);
+    } catch (err) {
+      logger.error(`(storageService.search) ${err.toString()}`);
       return new Promise((resolve, reject) => {
         reject(err);
       });
