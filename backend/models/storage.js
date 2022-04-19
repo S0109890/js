@@ -31,14 +31,14 @@ module.exports = class Storage extends Sequelize.Model {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      // // 책 사진
-      // image: {
-      //   type: Sequelize.STRING,
-      //   allowNull: true,
-      //   validate: {
-      //     isUrl: true
-      //   }
-      // },
+      // 책 사진
+      image: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        validate: {
+          isUrl: true
+        }
+      },
       //  리뷰
       review: {
         type: Sequelize.TEXT,

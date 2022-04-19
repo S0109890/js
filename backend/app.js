@@ -69,4 +69,9 @@ models.sequelize.authenticate().then(() => {
     logger.error('DB Connection fail', err);
 });
 
+// //naver api 연결 확인
+//  app.listen(3000, function () {
+//    console.log('http://127.0.0.1:3000/search/book?d_isbn=검색어 app listening on port 3000!');
+//  });
+
 module.exports = app;

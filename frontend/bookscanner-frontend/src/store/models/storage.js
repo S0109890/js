@@ -95,10 +95,10 @@ export default {
     actStorageInsert(context, payload) {
       // 상태값 초기화
       context.commit('setInsertedResult', null)
-
+      console.log('책정보{}오브젝트로전송됨', payload)
       // RestAPI 호출
       api
-        .post('/serverApi/regi', { ...payload, price: parseInt(payload.price) })
+        .post('/serverApi/regi', payload)
         .then(response => {
           const insertedResult = response && response.data && response.data.id
           context.commit('setInsertedResult', insertedResult)
