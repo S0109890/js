@@ -30,7 +30,7 @@ client2.loop_start()
 # common topic 으로 메세지 발행
 ##
 #토픽 ,메세지,012 qos
-client2.publish('raspberry/1', "payload = publisher send messages !!!once?", 1)
+client2.publish('rasp', "1234", 1)
 
 client2.loop_forever()
 # client2.loop_stop()

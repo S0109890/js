@@ -1,4 +1,4 @@
-from smbus import SMBus
+from smbus2 import SMBus
 from RPi.GPIO import RPI_REVISION
 from time import sleep
 from re import findall, match

@@ -21,7 +21,7 @@ I2CBUS = 0
 # LCD Address
 ADDRESS = 0x27
 
-import smbus
+import smbus2 as smbus
 from time import sleep
 
 class i2c_device:
