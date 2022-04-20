@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
 const { Storage } = require('../models/index');
+const { param } = require('../routes/home');
 
 // Storage.bulkCreate([
 //       {id: "1", isbn: "1165212308 9791165212308", title: "Node.js 교과서 (기본기에 충실한 노드제이에스 14 입문서)", author: "조현영",},
@@ -39,7 +40,54 @@ const dao = {
         author: { [Op.like]: `%${params.author}%` }, // like검색
       };
     }
+    // // where 검색 조건 ALL
+    // if (params.id) {
+    //   setQuery.where = {
+    //     ...setQuery.where,
+    //     id: params.id, // '='검색
+    //   };
+    // }
 
+    // order by 정렬 조건
+    setQuery.order = [['id', 'DESC']];
+    //결국 전달하는 건 이 부분이다.
+    return new Promise((resolve, reject) => {
+      Storage.findAndCountAll()
+      //전체를 전달한다.
+      .then((selectedList) => {
+        resolve(selectedList)
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+    // // order by 정렬 조건
+    // setQuery.order = [['id', 'DESC']];
+    // return new Promise((resolve, reject) => {
+    //   Storage.findAndCountAll({
+    //     ...setQuery,
+    //   }).then((selectedList) => {
+    //     resolve(selectedList);
+    //   }).catch((err) => {
+    //     reject(err);
+    //   });
+    // });
+  },
+  selectSearch(params) {
+    // where 검색 조건 - title
+    const setQuery = {};
+    if (params.title) {
+      setQuery.where = {
+        ...setQuery.where,
+        title: { [Op.like]: `%${params.title}%` }, // like검색
+      };
+    }
+    // where 검색 조건 - author
+    if (params.author) {
+      setQuery.where = {
+        ...setQuery.where,
+        author: { [Op.like]: `%${params.author}%` }, // like검색
+      };
+    }
     // order by 정렬 조건
     setQuery.order = [['id', 'DESC']];
     return new Promise((resolve, reject) => {

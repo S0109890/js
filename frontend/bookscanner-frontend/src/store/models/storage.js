@@ -4,14 +4,16 @@ import api from '../apiUtil'
 const stateInit = {
   Storage: {
     id: null,
-    sNum: null,
     isbn: null,
     title: null,
-    image: null,
+    author: null,
+    publisher: null,
+    review: null,
+    link: null,
     location: null,
     price: null,
-    review: null,
-    createdAt: null
+    createdAt: null,
+    updateAt: null
   }
 }
 
@@ -59,31 +61,44 @@ export default {
   },
   actions: {
     // 중고도서 리스트 조회
-    actStorageList(context, payload) {
-      console.log('actStorageList', payload)
-
+    actStorageList(context) {
       // RestAPI 호출
       api
-        .get('/serverApi/home', { params: payload })
+        .get('/serverApi/home')
         .then(response => {
-          const storageList = response && response.data && response.data.rows
+          const storageList = response && response.data
           context.commit('setStorageList', storageList)
-          console.log(storageList, payload)
+          console.log('초기리스트', storageList)
         })
         .catch(err => {
           console.error(err)
           context.commit('setStorageList', [])
         })
     },
+    // // 중고도서 리스트 조회
+    // actStorageList(context, payload) {
+    //   // RestAPI 호출
+    //   api
+    //     .get('/serverApi/home', { params: payload })
+    //     .then(response => {
+    //       console.log('초기화:리스트불러오기')
+    //       const storageList = response && response.data && response.data.rows
+    //       context.commit('setStorageList', storageList)
+    //     })
+    //     .catch(err => {
+    //       console.error(err)
+    //       context.commit('setStorageList', [])
+    //     })
+    // },
 
     // 중고도서 입력
     actStorageInsert(context, payload) {
       // 상태값 초기화
       context.commit('setInsertedResult', null)
-
+      console.log('책정보{}오브젝트로전송됨', payload)
       // RestAPI 호출
       api
-        .post('/serverApi/regi', { ...payload, price: parseInt(payload.price) })
+        .post('/serverApi/regi', payload)
         .then(response => {
           const insertedResult = response && response.data && response.data.id
           context.commit('setInsertedResult', insertedResult)
@@ -104,9 +119,29 @@ export default {
       context.commit('setInputMode', payload)
     },
 
-    // 중고도서 상세정보 조회
+    // 중고도서 상세정보 조회 검색
     actStorageInfo(context, payload) {
-      console.log('actStorageInfo', payload)
+      console.log('검색 입력값, payload', payload.title)
+
+      // 상태값 초기화
+      context.commit('setStorage', { ...stateInit.Storage })
+
+      // RestAPI 호출
+      api
+        .get(`/serverApi/home/${payload.title}`)
+        .then(response => {
+          const storage = response && response.data
+          context.commit('setStorage', storage)
+          // console.log('여기요여기', storage.rows[0])
+          // console.log('여기요여기', storage.rows[1])
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    // 리뷰보기 onclickReview id 값 받아옴
+    actStorageReview(context, payload) {
+      console.log('b-card, payload:id', payload)
 
       // 상태값 초기화
       context.commit('setStorage', { ...stateInit.Storage })
@@ -117,7 +152,7 @@ export default {
         .then(response => {
           const storage = response && response.data
           context.commit('setStorage', storage)
-          console.log(storage)
+          console.log('책(아이디) 정보받아오기', storage)
         })
         .catch(err => {
           console.error(err)

@@ -107,7 +107,7 @@ export default {
     onClickReviewDelete(id) {
       this.$bvModal.msgBoxConfirm('이 중고도서 리뷰를 삭제 하시겠습니까?').then(value => {
         if (value) {
-          this.$store.dispatch('actStorageReviewDelete', { ...this.storageInfo, review: null })
+          this.$store.dispatch('actStorageReviewDelete', id)
         } else {
           return
         }

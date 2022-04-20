@@ -1,6 +1,7 @@
 const logger = require('../lib/logger');
 const storageDao = require('../dao/storageDao');
-const axios = require('axios')
+const axios = require('axios');
+const { eventNames } = require('../app');
 
 
 const service = {
@@ -23,7 +24,7 @@ const service = {
     });
   },
 
-  // selectList
+  // selectList 리스트 불러오기
   async list(params) {
     let result = null;
     try {
@@ -43,11 +44,15 @@ const service = {
   // NAVER book API search
   async more_info(params) {
     let result = null;
+    const client_id = process.env.client_id;
+    const client_secret = process.env.client_secret;
+    console.log(client_id);
+    console.log(client_secret);
     try {
       result = await axios.get('https://openapi.naver.com/v1/search/book.json',{
       headers: {
-        'X-Naver-Client-Id' : 'qkgbpYoWMqnsIJh0Dcux', 
-        'X-Naver-Client-Secret' : 'KyABGi7_GI',
+        'X-Naver-Client-Id' : client_id, 
+        'X-Naver-Client-Secret' : client_secret,
       }, 
       params: {
         query : params
@@ -67,7 +72,7 @@ const service = {
     });
   },
   
-  // selectInfo
+  // selectInfo 리뷰상세 보기
   async info(params) {
     let result = null;
     try {
@@ -75,6 +80,23 @@ const service = {
       logger.debug(`(storageService.info) ${JSON.stringify(result)}`);
     } catch (err) {
       logger.error(`(storageService.info) ${err.toString()}`);
+      return new Promise((resolve, reject) => {
+        reject(err);
+      });
+    }
+    return new Promise((resolve) => {
+      resolve(result);
+    });
+  },
+
+  //DAO 검색 타이틀 저자 word Search
+  async search(params) {
+    let result = null;
+    try {
+      result = await storageDao.selectSearch(params);
+      logger.debug(`(storageService.search) ${JSON.stringify(result)}`);
+    } catch (err) {
+      logger.error(`(storageService.search) ${err.toString()}`);
       return new Promise((resolve, reject) => {
         reject(err);
       });

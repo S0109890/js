@@ -8,11 +8,28 @@ const storageService = require('../service/storageService');
 const { response } = require('express');
 const { DataTypes } = require("sequelize");
 
+// 검색후 이동되는 /
+router.get('/', async (req, res) => {
+  try {
+    console.log('req에 뭐가들어있는거야:review',req);
+    const params = { id: req.params.id, }
+    logger.info(`(storage.info.params) ${JSON.stringify(params)}`);
+    
+    const result = await storageService.info(params);
+    logger.info(`(storage.info.result) ${JSON.stringify(result)}`);  
+
+    // 최종 응답
+    res.status(200).json(result)
+  } catch (err) {
+    res.status(500).json({ err: err.toString() });
+  }
+})
 // 상세정보 조회
 router.get('/:id', async (req, res) => {
   try {
     const params = { id: req.params.id, }
     logger.info(`(storage.info.params) ${JSON.stringify(params)}`);
+    //{"id":"2"}
     
     const result = await storageService.info(params);
     logger.info(`(storage.info.result) ${JSON.stringify(result)}`);  
