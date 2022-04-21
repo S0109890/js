@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-const mqtt = import('../views/BS-mqtt.vue')
 
 Vue.use(VueRouter)
 
@@ -27,7 +26,7 @@ const routes = [
   },
   {
     path: '/mqtt',
-    component: mqtt
+    component: () => import('../views/BS-mqtt.vue')
   },
   {
     // path: '*'는 not found route 처리를 위한 것으로 항상 routes 배열 최하단에 위치해 있어야 합니다.

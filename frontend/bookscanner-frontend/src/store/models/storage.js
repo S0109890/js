@@ -61,36 +61,41 @@ export default {
   },
   actions: {
     // 중고도서 리스트 조회
-    actStorageList(context) {
-      // RestAPI 호출
+    actStorageList(context, payload) {
+      // RestAPI 호출 //prams: 검색어
       api
-        .get('/serverApi/home')
+        .get('/serverApi/home', { params: payload })
         .then(response => {
           const storageList = response && response.data
+
           context.commit('setStorageList', storageList)
-          console.log('초기리스트', storageList)
+          console.log('초기 & 검색 리스트', storageList)
         })
         .catch(err => {
           console.error(err)
           context.commit('setStorageList', [])
         })
     },
-    // // 중고도서 리스트 조회
-    // actStorageList(context, payload) {
-    //   // RestAPI 호출
-    //   api
-    //     .get('/serverApi/home', { params: payload })
-    //     .then(response => {
-    //       console.log('초기화:리스트불러오기')
-    //       const storageList = response && response.data && response.data.rows
-    //       context.commit('setStorageList', storageList)
-    //     })
-    //     .catch(err => {
-    //       console.error(err)
-    //       context.commit('setStorageList', [])
-    //     })
-    // },
+    // 중고도서 상세정보 조회 검색
+    actStorageInfo(context, payload) {
+      console.log('검색 입력값, payload', payload.title)
 
+      // 상태값 초기화
+      context.commit('setStorage', { ...stateInit.Storage })
+
+      // RestAPI 호출
+      api
+        .get(`/serverApi/home/${payload.title}`)
+        .then(response => {
+          const storage = response && response.data
+          context.commit('setStorageList', storage)
+          // console.log('여기요여기', storage.rows[0])
+          // console.log('여기요여기', storage.rows[1])
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
     // 중고도서 입력
     actStorageInsert(context, payload) {
       // 상태값 초기화
@@ -119,26 +124,6 @@ export default {
       context.commit('setInputMode', payload)
     },
 
-    // 중고도서 상세정보 조회 검색
-    actStorageInfo(context, payload) {
-      console.log('검색 입력값, payload', payload.title)
-
-      // 상태값 초기화
-      context.commit('setStorage', { ...stateInit.Storage })
-
-      // RestAPI 호출
-      api
-        .get(`/serverApi/home/${payload.title}`)
-        .then(response => {
-          const storage = response && response.data
-          context.commit('setStorage', storage)
-          // console.log('여기요여기', storage.rows[0])
-          // console.log('여기요여기', storage.rows[1])
-        })
-        .catch(err => {
-          console.error(err)
-        })
-    },
     // 리뷰보기 onclickReview id 값 받아옴
     actStorageReview(context, payload) {
       console.log('b-card, payload:id', payload)

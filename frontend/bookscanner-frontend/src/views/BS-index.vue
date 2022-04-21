@@ -69,8 +69,9 @@ export default {
         { text: '제목', value: 'title' },
         { text: '저자', value: 'author' }
       ],
-      selectSearch: 'title',
-      searchInput: null
+      selectSearch: 'title', //검색 옵션 : 제목검색
+      searchInput: null, //검색어
+      is_search: false //검색 완료시 ture로 바뀌고, 목록 새로고침
     }
   },
   computed: {
@@ -101,6 +102,7 @@ export default {
       // 2. 리스트 재검색
       let searchID = value.rows
       console.log('reload', searchID)
+      this.searchStorageList()
     },
     insertedResult(value) {
       // 등록 후 처리
@@ -202,6 +204,8 @@ export default {
       } else {
         this.$store.dispatch('actStorageList')
       }
+      // 2. 리스트 재검색
+      this.searchStorageList()
     },
 
     onClickReview(id) {
@@ -211,6 +215,10 @@ export default {
     },
     searchStorageList() {
       //리스트 불러오기
+      this.$store.dispatch('actStorageList')
+    },
+    searchStorageResult() {
+      //검색결과 출력?
       this.$store.dispatch('actStorageList')
     }
   }

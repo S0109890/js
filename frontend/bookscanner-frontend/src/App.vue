@@ -14,5 +14,3 @@ export default {
   }
 }
 </script>
-
-<style src="./assets/style/main.css"></style>
