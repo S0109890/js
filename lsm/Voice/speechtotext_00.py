@@ -41,6 +41,9 @@ from six.moves import queue
 import RPi.GPIO as GPIO
 import time
 from playsound import playsound
+# animal 패키지에서 dog 라는 모듈을 불러와
+# from _mqtt import publish
+
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = \
     os.getenv('GOOGLE_KEY')
@@ -118,6 +121,7 @@ class MicrophoneStream(object):
             yield b"".join(data)
 
 
+###hear ##Speech to Text code
 def listen_print_loop(responses):
     """Iterates through server responses and prints them.
 
@@ -133,6 +137,7 @@ def listen_print_loop(responses):
     the next result to overwrite it, until the response is a final one. For the
     final one, print a newline to preserve the finalized transcription.
     """
+    ##global variable
     global _data
     num_chars_printed = 0
     for response in responses:
@@ -191,10 +196,12 @@ def listen_print_loop(responses):
 
             num_chars_printed = 0
 
-
+###main #######
+#
 def main():
-    #sound
+    #Voice search sound play
     playsound("seach_voice.mp3")
+    ##led on
     light()
     # See http://g.co/cloud/speech/docs/languages
     # for a list of supported languages.
@@ -222,31 +229,34 @@ def main():
 
         # Now, put the transcription responses to use.
         listen_print_loop(responses)
-        # print("문장받아왔음,res")
-    melody()
-    light()
-    #button
-    print("button click")
+    melody() #sound play
+    light() #led off
+    #respenses Value -> _data
+    print("speech to text end", _data)
     playsound("button-voice.mp3")
 
-#event1
+#Button1 event callback function
 button1_state = False
 button1_state_change = False
 def button1Pressed(channel):
-    print("Right")
-    # #23 Right 1
+    # 16 Right = send mqtt to web front
+    #####mqtt
+    playsound("Mouse Click Sound Effect.mp3")
+    print("Right",channel)
     # if complete:
     #     exit()
-    # else :
-    #     main()
 
 
+#Button2 event callback function
 button2_state = False
 button2_state_change = False
 def button2Pressed(channel):
+    #12 Left = Wrong Words
+    #reStart main
+    playsound("Mouse Click Sound Effect.mp3")
     print("Left")
-    #16 Left 2
     main()
+
 
 
 
@@ -287,23 +297,31 @@ def light():
 if __name__ == "__main__":
     try:
         # init()
+        #1=Right
         button1_pin = 16
+        #2=Left
         button2_pin = 12
 
         GPIO.setwarnings(True)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(button1_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)     #Button1 입력 GPIO16
-        GPIO.setup(button2_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)       #Button3 입력 GPIO4
+        GPIO.setup(button2_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)       #Button2 입력 GPIO12
 
         # GPIO.remove_event_detect(button1_pin)
         # GPIO.remove_event_detect(button2_pin)
 
+        #Event : Button Click
         # GPIO.add_event_detect(button1_pin, GPIO.RISING, callback=button1Pressed)
         GPIO.add_event_detect(button2_pin, GPIO.RISING ,callback=button2Pressed)
+
+        #main
         main()
+        #Right =1= right / Wrong =2= Left = reStart
+        #Wating for Button1(Right)
         while True:
             GPIO.wait_for_edge(button1_pin, GPIO.FALLING)
             print("Button pressed! save",_data)
+            #data = Word(for search a book)
     except KeyboardInterrupt:
         print("CTRL+C used to end Program")
 

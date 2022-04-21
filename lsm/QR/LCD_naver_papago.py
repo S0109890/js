@@ -7,7 +7,10 @@ import os
 import sys
 import urllib.request
 import json
+# from _mqtt import Subscriber
+from _mqtt import Publisher
 
+#dot env 
 load_dotenv()
 #naver api
 CLIENT_ID = os.getenv('client_id')
@@ -16,6 +19,11 @@ CLIENT_SECRET = os.getenv('client_secret')
 #LCD display
 display = drivers.Lcd()
 # display = I2C_LCD_driver.lcd()
+
+#mqtt subscribe
+# the callback function, it will be triggered when receiving messages
+# def on_message( client, userdata, msg):
+#     print(str(msg.payload.decode("utf-8")))
 
 
 #request
@@ -70,15 +78,21 @@ def papago(book):
 
 
 if __name__ == "__main__":
+    #mqtt
+    # subscriber = Subscriber(on_message)
+    # subscriber.start()
+    publisher = Publisher()
+    publisher.start()
     #csv first line only
     f = open('barcodes.csv', 'r', encoding='utf-8')
     rdr = csv.reader(f)
     for line in rdr:
         #search
-        print(line[1])
+        print(line[1]) #line 1 , scond value : isbn
+        publisher.publish(line[1])
         books = search_book(line[1])['items']
-
-        #erro
+    
+        #error
         if(books == None):
             print("fail")
             exit()

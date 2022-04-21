@@ -1,8 +1,9 @@
-from imutils.video import VideoStream
 from pyzbar import pyzbar
 import argparse
 import datetime
 import imutils
+from imutils.video import FPS
+from imutils.video import VideoStream
 import time
 import cv2
 from playsound import playsound
@@ -35,20 +36,24 @@ ap.add_argument("-o","--output",type=str,default="barcodes.csv",help="path to ou
 args = vars(ap.parse_args())
 
 
+#camera setting
 #from there, initialize our video stream and open our CSV file
 print("[INFO] starting video stream...")
+#resolution = (1296, 976)
+#vs = VideoStream(usePiCamera=True,resolution=resolution,
+#                    framerate=24).start()
+vs = VideoStream(usePiCamera=True).start()
 
-#camera setting
-resolution = (1296, 976)
-
-vs = VideoStream(usePiCamera=True,resolution=resolution,
-                    framerate=24).start()
+fps = FPS().start()
 
 
+# allow the camera to warmup
 time.sleep(2.0)
+
 
 #open output CSV file for writing and initialize the set of barcodes 
 csv = open(args["output"],"w")
+#found barcode list
 found = set()
 
 #bool _
@@ -59,60 +64,59 @@ isComplete = False
 while True:
     #frame
     frame = vs.read()
-    frame = imutils.resize(frame, width = 1200)
+    print(frame)
+    if frame is not None:
+        frame = imutils.resize(frame, width = 600)
+        #crop def
+        #crop = autocrop(frame,50)
+        
+        #barcode in frame and decode
+        barcodes = pyzbar.decode(frame)
 
-    #crop def
-    crop = autocrop(frame,50)
+        #barcodes = pyzbar.decode(crop)
+        print(barcodes)
 
-    #barcode in frame and decode
-    # barcodes = pyzbar.decode(frame)
-    barcodes = pyzbar.decode(crop)
+        #loop over the detected barcodes 
+        for barcode in barcodes:
+            #draw red box
+            (x,y,w,h) = barcode.rect
+            cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)
 
+            #bype to text
+            barcodeData = barcode.data.decode("utf-8")
+            barcodeType = barcode.type
 
-    #loop over the detected barcodes 
-    for barcode in barcodes:
-        #draw red box
-        (x,y,w,h) = barcode.rect
-        cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)
+            #data , type on image
+            text = "{} ({})".format(barcodeData,barcodeType)
+            cv2.putText(frame,text,(x,y-10),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,255),2)
 
-        #bype to text
-        barcodeData = barcode.data.decode("utf-8")
-        barcodeType = barcode.type
+            #found = our CSV file
+            if barcodeData not in found:
+                csv.write("{},{}\n".format(datetime.datetime.now(),barcodeData))
+                csv.flush()
+                found.add(barcodeData)
+                print("인식 성공 :",barcodeData)
+                playsound("barcode_beep.mp3")
+            else :
+                # csv.write("{},{}\n".format(datetime.datetime.now(),barcodeData))
+                # csv.flush()
+                #print type , data to the terminal
+                print("이미 인식된 코드 [INFO] Found {} barcode: {}".format(barcodeData,barcodeType))
+                playsound("barcode_beep.mp3")
+                isComplete= True
+            break
+        fps.stop()
+        #close
+        if isComplete:
+            print("recognition complete")
+            break
+        #show output image
+        cv2.imshow("Barcode Scanner",frame)
+        key = cv2.waitKey(1) & 0xFF
 
-        #data , type on image
-        text = "{} ({})".format(barcodeData,barcodeType)
-        cv2.putText(frame,text,(x,y-10),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,255),2)
-
-        #found = our CSV file
-        if barcodeData not in found:
-            csv.write("{},{}\n".format(datetime.datetime.now(),barcodeData))
-            csv.flush()
-            found.add(barcodeData)
-            print("인식 성공 :",barcodeData)
-            playsound("barcode_beep.mp3")
-        else :
-            # csv.write("{},{}\n".format(datetime.datetime.now(),barcodeData))
-            # csv.flush()
-            #print type , data to the terminal
-            print("이미 인식된 코드 [INFO] Found {} barcode: {}".format(barcodeData,barcodeType))
-            playsound("barcode_beep.mp3")
-            isComplete= True
-        break
-
-    #close
-    if isComplete:
-        print("recognition complete")
-        break
-            
-            
-
-    #show output image
-    cv2.imshow("Barcode Scanner",frame)
-    key = cv2.waitKey(1) & 0xFF
-
-    #q press loop break
-    if key == ord("q"):
-        break
+        #q press loop break
+        if key == ord("q"):
+            break
 
 #close the output CSV file do a bit of clean up
 print("[INFO] cleaning up...")
