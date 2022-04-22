@@ -48,11 +48,12 @@ router.get('/', async (req, res) => {
     const params = { 
       title: req.query.title,
       author: req.query.author, 
+      isbn: req.query.isbn, 
      };
     logger.info(`(storage.list.params) ${JSON.stringify(params)}`);
     
     const result = await storageService.list(params);
-    console.log("###리스트불러오기",result);
+    console.log("get home/ : ###리스트불러오기");
 
     logger.info(`(storage.list.result) ${JSON.stringify(result)}`);
 
@@ -64,14 +65,57 @@ router.get('/', async (req, res) => {
 })
 
 
-//검색기능 상세정보 조회
-router.get('/:title', async (req, res) => {
+//제목 검색기능 상세정보 조회
+router.get('/title/:title', async (req, res) => {
   try {
     const params = { 
       title: req.params.title,
       author: req.params.author, 
+      isbn: req.params.isbn, 
     }
-    console.log('여보세요:params?',params)
+    console.log(`#########여보세요?`,params.title)
+    logger.info(`(storage.search.params) ${JSON.stringify(params)}`);
+
+    const result = await storageService.search(params)
+    console.log("req 값이 포함된 제목 검색",result);
+    logger.info(`(storage.search.result) ${JSON.stringify(result)}`);
+
+    // 최종 응답
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ err: err.toString() });
+  }
+})
+//저자 검색기능 상세정보 조회
+router.get('/author/:author', async (req, res) => {
+  try {
+    const params = { 
+      title: req.params.title,
+      author: req.params.author, 
+      isbn: req.params.isbn, 
+    }
+    console.log(`#########여보세요?`,params.author)
+    logger.info(`(storage.search.params) ${JSON.stringify(params)}`);
+
+    const result = await storageService.search(params)
+    console.log("req 값이 포함된 제목 검색",result);
+    logger.info(`(storage.search.result) ${JSON.stringify(result)}`);
+
+    // 최종 응답
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ err: err.toString() });
+  }
+})
+//제목 검색기능 상세정보 조회
+router.get('/isbn/:isbn', async (req, res) => {
+  try {
+    const params = { 
+      title: req.params.title,
+      author: req.params.author, 
+      isbn: req.params.isbn, 
+    }
+    console.log(`#########여보세요?`,params.isbn)
     logger.info(`(storage.search.params) ${JSON.stringify(params)}`);
 
     const result = await storageService.search(params)

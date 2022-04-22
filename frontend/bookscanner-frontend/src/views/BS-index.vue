@@ -22,10 +22,8 @@
     <!-- book list section -->
     <b-container id="card-section" fluid>
       <b-card-group deck>
-        <!-- 임시 데이터 연결 위해 key 값을 임의로 index 지정하였기 때문에 함께 전송하는 파라미터 값에 1이 합산되어 보내집니다.(onClickReview)
-        API 연결 후 자체 데이터 id 값으로 수정해야 합니다. -->
         <b-card
-          v-for="item in storageList.rows"
+          v-for="item in storageList"
           :key="item.id"
           :title="item.title"
           :img-src="item.image"
@@ -34,7 +32,7 @@
         >
           <b-card-text v-if="item.review">
             {{ item.review }}
-            {{ item.id }}
+            <!-- {{ item.id }} -->
           </b-card-text>
           <b-card-text v-if="!item.review" style="color: #6c757d; margin-bottom: 35.2px">
             등록된 리뷰가 없습니다.
@@ -47,6 +45,8 @@
 </template>
 
 <script>
+import mqtt from 'mqtt'
+
 export default {
   data() {
     return {
@@ -67,12 +67,18 @@ export default {
       // 제목 & 저자명 search 위한 변수들입니다.
       select: [
         { text: '제목', value: 'title' },
+        { text: 'ISBN', value: 'isbn' },
         { text: '저자', value: 'author' }
       ],
       selectSearch: 'title', //검색 옵션 : 제목검색
       searchInput: null, //검색어
-      is_search: false //검색 완료시 ture로 바뀌고, 목록 새로고침
+      isMQTT: false, // mqtt에서 보낸값인가?
+      mtopic: 'rasp/1', //토픽 설정
+      mqttDataList: [] // mqtt를 통해 받은 데이터(리스트로 계속 추가됨)
     }
+  },
+  mounted() {
+    this.createMqtt()
   },
   computed: {
     //값이 변하면 값을 반영함
@@ -98,12 +104,9 @@ export default {
   },
   watch: {
     //모달이 열린 이후에 감지됨 : 컴퓨트에서 바뀐 값 계속 받아옴.
-    storage(value) {
-      // 2. 리스트 재검색
-      let searchID = value.rows
-      console.log('reload', searchID)
-      this.searchStorageList()
-    },
+    // storage(value) {
+    //   //리스트는 계속해서 불러와지는 중이다.
+    // },
     insertedResult(value) {
       // 등록 후 처리
       if (value !== null) {
@@ -193,19 +196,25 @@ export default {
       this.searchStorageList()
     },
     onClickSearch(searchInput) {
+      console.log(this.selectSearch)
       //검색하기
-      if (searchInput) {
+      if (!this.isMQTT) {
         if (this.selectSearch === 'title') {
           this.$store.dispatch('actStorageInfo', { title: searchInput })
         }
         if (this.selectSearch === 'author') {
           this.$store.dispatch('actStorageInfo', { author: searchInput })
         }
+        if (this.selectSearch === 'isbn') {
+          this.$store.dispatch('actStorageInfo', { isbn: searchInput })
+        }
       } else {
-        this.$store.dispatch('actStorageList')
+        //isMQTT = true
+        this.$store.dispatch('actStorageInfo', { isbn: searchInput })
+        this.isMQTT = false
       }
       // 2. 리스트 재검색
-      this.searchStorageList()
+      // this.searchStorageList()
     },
 
     onClickReview(id) {
@@ -217,9 +226,29 @@ export default {
       //리스트 불러오기
       this.$store.dispatch('actStorageList')
     },
-    searchStorageResult() {
-      //검색결과 출력?
-      this.$store.dispatch('actStorageList')
+    createMqtt() {
+      // mqtt연결
+      const mqttClient = mqtt.connect(process.env.VUE_APP_MQTT)
+
+      mqttClient.on('connect', () => {
+        // mqtt연결 시 구독한다.
+        const topic = this.mtopic // 구독할 topic
+        console.log('connect')
+        mqttClient.subscribe(topic, {}, (error, res) => {
+          if (error) {
+            console.error('mqtt client error', error)
+          }
+        })
+      })
+      // 메세지 실시간 수신
+      mqttClient.on('message', (topic, message) => {
+        const mqttData = JSON.parse(message) // json string으로만 받을 수 있음
+        // 선택된 devicdId만 수용함
+        this.mqttDataList.push(mqttData) // 리스트에 계속 추가함
+        console.log('MQTTmessage : ', mqttData) //메세지 출력
+        this.isMQTT = true //mqtt에서 보낸값
+        this.onClickSearch(mqttData) //isbn 검색
+      })
     }
   }
 }

@@ -40,21 +40,24 @@ const dao = {
         author: { [Op.like]: `%${params.author}%` }, // like검색
       };
     }
-    // // where 검색 조건 ALL
-    // if (params.id) {
-    //   setQuery.where = {
-    //     ...setQuery.where,
-    //     id: params.id, // '='검색
-    //   };
-    // }
-
+    // where 검색 조건 - isbn
+    if (params.isbn) {
+      setQuery.where = {
+        ...setQuery.where,
+        isbn: { [Op.like]: `%${params.isbn}%` }, // like검색
+      };
+    }
+    console.log("####리스트불러오기",params.isbn)
+    console.log("####리스트불러오기",params.title)
+    console.log("####리스트불러오기",params.author)
     // order by 정렬 조건
     setQuery.order = [['id', 'DESC']];
     //결국 전달하는 건 이 부분이다.
     return new Promise((resolve, reject) => {
-      Storage.findAndCountAll()
+       Storage.findAndCountAll({
+         ...setQuery,
       //전체를 전달한다.
-      .then((selectedList) => {
+       }).then((selectedList) => {
         resolve(selectedList)
       }).catch((err) => {
         reject(err);
@@ -83,9 +86,17 @@ const dao = {
     }
     // where 검색 조건 - author
     if (params.author) {
+      console.log("###저자검색한다",params.author);
       setQuery.where = {
         ...setQuery.where,
         author: { [Op.like]: `%${params.author}%` }, // like검색
+      };
+    }
+    // where 검색 조건 - isbn
+    if (params.isbn) {
+      setQuery.where = {
+        ...setQuery.where,
+        isbn: { [Op.like]: `%${params.isbn}%` }, // like검색
       };
     }
     // order by 정렬 조건

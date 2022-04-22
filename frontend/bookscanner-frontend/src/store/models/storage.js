@@ -25,7 +25,8 @@ export default {
     UpdatedResult: null, // 수정처리 후 결과
     DeletedResult: null, // 삭제처리 후 결과
     ReviewDeletedResult: null, // 리뷰 삭제처리 후 결과
-    InputMode: null // 입력모드(등록: insert, 수정: update)
+    InputMode: null, // 입력모드(등록: insert, 수정: update)
+    SelectOption: null // 검색 옵션 ( title, author, isbn)
   },
   getters: {
     StorageList: state => state.StorageList,
@@ -34,7 +35,8 @@ export default {
     StorageUpdatedResult: state => state.UpdatedResult,
     StorageDeletedResult: state => state.DeletedResult,
     StorageReviewDeletedResult: state => state.ReviewDeletedResult,
-    StorageInputMode: state => state.InputMode
+    StorageInputMode: state => state.InputMode,
+    StorageSelectOption: state => state.SelectOption
   },
   mutations: {
     setStorageList(state, data) {
@@ -57,19 +59,24 @@ export default {
     },
     setInputMode(state, data) {
       state.InputMode = data
+    },
+    setSelectOption(state, data) {
+      state.SelectOption = data
     }
   },
   actions: {
     // 중고도서 리스트 조회
     actStorageList(context, payload) {
+      console.log('actStorageList', payload)
       // RestAPI 호출 //prams: 검색어
       api
         .get('/serverApi/home', { params: payload })
         .then(response => {
-          const storageList = response && response.data
+          const storageList = response && response.data && response.data.rows
+          console.log('초기 & 검색 리스트', response.data.rows)
+          console.log('초기리스트', storageList)
 
           context.commit('setStorageList', storageList)
-          console.log('초기 & 검색 리스트', storageList)
         })
         .catch(err => {
           console.error(err)
@@ -78,23 +85,26 @@ export default {
     },
     // 중고도서 상세정보 조회 검색
     actStorageInfo(context, payload) {
-      console.log('검색 입력값, payload', payload.title)
-
       // 상태값 초기화
       context.commit('setStorage', { ...stateInit.Storage })
 
       // RestAPI 호출
-      api
-        .get(`/serverApi/home/${payload.title}`)
-        .then(response => {
-          const storage = response && response.data
-          context.commit('setStorageList', storage)
-          // console.log('여기요여기', storage.rows[0])
-          // console.log('여기요여기', storage.rows[1])
-        })
-        .catch(err => {
-          console.error(err)
-        })
+      if (payload !== undefined) {
+        let _option = Object.keys(payload)[0]
+        let _value = payload[Object.keys(payload)[0]]
+        console.log('store검색 입력값, option:', _option)
+        console.log('store검색 입력값, value:', _value)
+        api
+          .get(`/serverApi/home/${_option}/${_value}`)
+          .then(response => {
+            const storage = response && response.data
+            context.commit('setStorageList', storage.rows) // 리스트에 넣는다.
+            console.log('store검색 결과', storage.rows) // 책 하나의 정보들
+          })
+          .catch(err => {
+            console.error(err)
+          })
+      }
     },
     // 중고도서 입력
     actStorageInsert(context, payload) {
@@ -119,9 +129,14 @@ export default {
       context.commit('setStorage', { ...stateInit.Storage })
     },
 
-    // 입력모드 설정
+    // 입력모드 설정 : 등록 /수정
     actStorageInputMode(context, payload) {
       context.commit('setInputMode', payload)
+    },
+    // 검색 옵션  설정 : title author isbn
+    actStorageSelectOption(context, payload) {
+      console.log(payload)
+      context.commit('setSelectOption', payload)
     },
 
     // 리뷰보기 onclickReview id 값 받아옴
