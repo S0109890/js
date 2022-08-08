@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const corsConfig = require('./config/corsConfig.json');
-const models = require('./models');
+// const models = require('./models');
 const logger = require('./lib/logger');
 const bodyParser = require('body-parser');
 
@@ -53,21 +53,21 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-// DB 연결 확인
-models.sequelize.authenticate().then(() => {
-  logger.info('DB connection success')
+// // DB 연결 확인
+// models.sequelize.authenticate().then(() => {
+//   logger.info('DB connection success')
 
-    // sequelize sync (다 지우고 싹 다시 table 생성)
-    // models.sequelize.sync({force:true}).then(() => {
-    // sequelize sync (table 생성)
-    models.sequelize.sync().then(() => {
-      logger.info('Sequelize sync success');
-    }).catch((err) => {
-      logger.error('Sequelize sync error', err);
-    });
-  }).catch((err) => {
-    logger.error('DB Connection fail', err);
-});
+//     // sequelize sync (다 지우고 싹 다시 table 생성)
+//     // models.sequelize.sync({force:true}).then(() => {
+//     // sequelize sync (table 생성)
+//     models.sequelize.sync().then(() => {
+//       logger.info('Sequelize sync success');
+//     }).catch((err) => {
+//       logger.error('Sequelize sync error', err);
+//     });
+//   }).catch((err) => {
+//     logger.error('DB Connection fail', err);
+// });
 
 // //naver api 연결 확인
 //  app.listen(3000, function () {

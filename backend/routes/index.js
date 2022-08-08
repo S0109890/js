@@ -1,8 +1,8 @@
 const express = require('express');
 const logger = require('../lib/logger');
 const homeRouter = require('./home');
-const reviewRouter = require('./review');
-const regiRouter = require('./regi');
+// const reviewRouter = require('./review');
+// const regiRouter = require('./regi');
 
 const router = express.Router();
 
@@ -25,8 +25,8 @@ router.get('/log-test', (req, res, next) => {
 
 // RESTFull API
 router.use('/home', homeRouter);
-router.use('/review', reviewRouter);
-router.use('/regi', regiRouter);
+// router.use('/review', reviewRouter);
+// router.use('/regi', regiRouter);
 
 
 module.exports = router;

@@ -2,17 +2,17 @@ version: '3'
 services:
   # database build
   database:
-    container_name: book_db
+    container_name: photo_db
     # 빌드될 dockerfile 위치
     build:
       context: ./database
     # 만들어질 이미지파일 이름
-    image: book_db
+    image: photo_db
     # 연결될 DB 환경설정 값
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=meta_bookstore
+      - POSTGRES_DB=meta_ai
     volumes:
       - ./database/db:/var/lib/postgresql/data
       # - ./database/db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
@@ -38,7 +38,7 @@ services:
       - LOGGER_LEVEL=debug
       - DB_HOST=database
       - DB_PORT=5432
-      - DB_DATABASE=meta_bookstore
+      - DB_DATABASE=meta_ai
       - DB_ID=postgres
       - DB_PASS=postgres
       - DB_DIALECT=postgres

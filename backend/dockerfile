@@ -14,8 +14,8 @@ RUN npm ci
 # 앱 소스 추가
 COPY . /usr/src/app
 
-# 3000번 포트 연결
-EXPOSE 3000
+# 3001번 포트 연결
+EXPOSE 3001
 
 # nodemon으로 실행
 CMD [ "npm", "start" ]
